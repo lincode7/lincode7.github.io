@@ -1,0 +1,300 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 2. 自定义主题 - 替代 tailwind.config.js 中的 theme.extend */
+@theme {
+  /* 2.1 自定义颜色 */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* 2.2 自定义圆角 */
+  --radius: 0.5rem;
+
+  /* 2.3 自定义动画 - 替代 keyframes 扩展 */
+  --animate-fade-in: fadeIn 1.5s infinite;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-slide-right: slideRight 0.5s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 6s infinite;
+  --animate-spin-slow: spin 6s infinite;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideRight {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+/* 3. 基础层：定义CSS自定义属性（CSS变量） */
+@layer base {
+  /* 3.1 浅色主题变量 */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+  }
+
+  /* 3.2 深色主题变量 */
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+
+  /* 3.3 基础元素样式 */
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-extrabold leading-[1.2] mb-0.5;
+  }
+
+  h2 {
+    @apply text-xl md:text-2xl font-bold mb-1.5;
+  }
+
+  h3 {
+    @apply text-lg md:text-xl font-semibold mb-4;
+  }
+
+  p {
+    @apply text-foreground/50 text-lg max-w-3xl;
+  }
+}
+
+/* 4. 组件层：可复用的样式类 */
+@layer components {
+  .avatar {
+    @apply rounded-full w-32 h-32 object-cover border-4 border-white  shadow-lg;
+    @apply transition-transform duration-300 ease-in-out hover:scale-105;
+    @apply animate-float;
+  }
+
+  .bootom-line {
+    @apply mb-4 relative;
+    @apply after:absolute after:left-0 after:-bottom-1 after:h-[3px] after:w-[60px] after:rounded-xs after:bg-linear-90 after:from-primary after:to-secondary;
+  }
+
+  .tag {
+    @apply relative px-4 py-2 bg-border rounded-full text-sm font-bold transition-all duration-200 ease-linear cursor-pointer overflow-hidden;
+  }
+
+  .tag:hover {
+    @apply bg-primary text-white -translate-y-0.5 shadow-lg;
+  }
+
+  .container {
+    @apply mx-auto p-4 sm:p-6 md:p-8 lg:p-12;
+  }
+
+  .card {
+    @apply bg-card text-card-foreground rounded-lg border shadow-md p-8 bg-linear-to-br from-accent to-background;
+  }
+
+  .hover-shadow {
+    @apply transition-all duration-300 hover:shadow-lg dark:hover:shadow-foreground/10;
+  }
+
+  .hover-scaled {
+    @apply transition-all duration-300 hover:scale-105;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .tag-cloud-svg {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  }
+
+  .tag-cloud-svg g {
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .tag-cloud-svg g:hover {
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.2));
+    z-index: 10;
+  }
+
+  .tag-cloud-svg text {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* 键盘焦点样式 */
+  .tag-cloud-svg g:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+    border-radius: 50%;
+  }
+}
+
+/* 5. 工具层：额外的自定义样式（可选） */
+@layer utilities {
+  /* 弹性布局 */
+  .flex-left {
+    @apply flex items-center justify-start;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-around {
+    @apply flex items-center justify-around;
+  }
+
+  .flex-wrap {
+    @apply flex flex-wrap;
+  }
+
+  .flex-col {
+    @apply flex flex-col;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .flex-row {
+    @apply flex flex-row;
+  }
+
+  /* 文本截断 */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  /* 滚动条美化（仅Webkit内核浏览器） */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.5);
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.7);
+  }
+}
