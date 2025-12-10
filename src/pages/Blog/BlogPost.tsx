@@ -11,9 +11,9 @@ import { marked } from "marked";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
-import { createSuspenseResource } from "../../hooks/useAsync";
 import { blogAPI } from "../../utils/api";
 import { formatDate } from "../../utils/helper";
+import { createSuspenseResource } from "../../utils/suspense";
 
 const postResource = createSuspenseResource(blogAPI.getPost);
 

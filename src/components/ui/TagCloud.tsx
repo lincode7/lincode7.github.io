@@ -165,13 +165,13 @@ export default function TagCloud({
       .on("click", (event) => {
         event.stopPropagation();
       })
-      .on("mouseenter", (event, d) => {
+      .on("mouseenter", function (this: any, _event, d) {
         d3.select(this)
           .transition()
           .duration(animationSpeed)
           .attr("transform", `translate(${d.x},${d.y}) scale(1.15)`);
       })
-      .on("mouseleave", (event, d) => {
+      .on("mouseleave", function (this: any, _event, d) {
         d3.select(this)
           .transition()
           .duration(animationSpeed)
@@ -260,7 +260,7 @@ export default function TagCloud({
       });
 
     // 添加点击动画
-    tags.on("click", function (event, d) {
+    tags.on("click", function (this: any, _event, d) {
       onTagClick(d.id);
     });
 

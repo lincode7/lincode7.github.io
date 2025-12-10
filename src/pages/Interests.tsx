@@ -1,8 +1,8 @@
 import { Film, Gamepad2, Music, Plane } from "lucide-react";
 import MetaTags from "../components/seo/MetaTags";
 import { Card } from "../components/ui/Card";
-import { createSuspenseResource } from "../hooks/useAsync";
 import { interestsAPI } from "../utils/api";
+import { createSuspenseResource } from "../utils/suspense";
 
 const statsResource = createSuspenseResource(interestsAPI.getStats);
 const recentActivitiesResource = createSuspenseResource(

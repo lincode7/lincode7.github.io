@@ -1,4 +1,8 @@
+.gitconfig
+.ssh
+
 node_modules
+dist
 
 logs
 *.log

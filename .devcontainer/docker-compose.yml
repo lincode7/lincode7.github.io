@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: protoc-go
+    container_name: go-protoc-node
     volumes:
       # 挂载项目代码
       - ..:/app:cached
@@ -13,6 +13,10 @@ services:
       - go-mod-cache:/go/pkg/mod
       # 挂载 Node.js 缓存
       - node-modules-cache:/app/node_modules
+      # 挂载 .gitconfig 配置
+      - /mnt/c/Users/lin/.gitconfig:/app/.gitconfig
+      # 挂载 .ssh
+      - /mnt/c/Users/lin/.ssh:/app/.ssh
     working_dir: /app # 重要：设置工作目录
     ports:
       - "3000:3000" # React 开发服务器

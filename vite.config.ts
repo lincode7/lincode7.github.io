@@ -1,5 +1,6 @@
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -31,8 +32,14 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+      "@assets": resolve(__dirname, "src/assets"),
+    },
+  },
   // GitHub Pages 需要的基础路径
-  base: process.env.NODE_ENV === "production" ? "/blog/" : "/",
+  base: "/",
   build: {
     outDir: "dist",
     sourcemap: false,

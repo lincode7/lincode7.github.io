@@ -1,5 +1,3 @@
-import type { BlogPost, TagCount } from "../types";
-
 // 格式化日期
 export const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString("zh-CN", {
@@ -21,7 +19,7 @@ export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {
-  let timeout: NodeJS.Timeout;
+  let timeout: number;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -41,22 +39,6 @@ export const throttle = <T extends (...args: any[]) => any>(
       setTimeout(() => (inThrottle = false), limit);
     }
   };
-};
-
-// 生成标签云数据
-export const generateTagCloudData = (posts: BlogPost[]): TagCount[] => {
-  const tagMap = new Map<string, number>();
-
-  posts.forEach((post) => {
-    post.tags.forEach((tag) => {
-      tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-    });
-  });
-
-  return Array.from(tagMap.entries()).map(([name, count]) => ({
-    name,
-    count,
-  }));
 };
 
 // 类名合并工具

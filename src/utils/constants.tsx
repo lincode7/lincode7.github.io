@@ -1,3 +1,4 @@
+import avatar from "@assets/avatar.svg";
 import { BookOpen, Gamepad2, Github, Home } from "lucide-react";
 
 export const SITE_CONFIG = {
@@ -5,7 +6,7 @@ export const SITE_CONFIG = {
   description: "分记录想法，分享生活，探索技术的无限可能。",
   author: {
     name: "z",
-    avatar: "../../public/vite.svg",
+    avatar: avatar,
     label: "全栈开发者 | 技术爱好者 | 旅行达人",
     location: "上海",
     contacts: {

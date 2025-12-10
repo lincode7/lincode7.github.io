@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
 import { Card } from "../../components/ui/Card";
 import TagCloud from "../../components/ui/TagCloud";
-import { createSuspenseResource } from "../../hooks/useAsync";
 import { blogAPI } from "../../utils/api";
+import { createSuspenseResource } from "../../utils/suspense";
 
 const tagsResource = createSuspenseResource(blogAPI.getTags);
 

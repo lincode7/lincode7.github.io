@@ -27,6 +27,9 @@ RUN go install github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest && \
 RUN apk add --no-cache nodejs npm && \
     npm install -g yarn
 
+# 安装git
+RUN apk add --no-cache git
+
 # 设置工作目录
 WORKDIR /app
 

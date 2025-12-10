@@ -11,8 +11,8 @@ import MetaTags from "../components/seo/MetaTags";
 import { Card } from "../components/ui/Card";
 import ContactInfo from "../components/ui/ContactInfo";
 import StatCard from "../components/ui/StatsCard";
-import { createSuspenseResource } from "../hooks/useAsync";
 import { SITE_CONFIG } from "../utils/constants";
+import { createSuspenseResource } from "../utils/suspense";
 
 interface BlogStats {
   total: number;
