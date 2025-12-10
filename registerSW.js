@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/lincode7.github.io/sw.js', { scope: '/lincode7.github.io/' })})}

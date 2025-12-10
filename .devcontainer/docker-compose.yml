@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: protoc-go
+    volumes:
+      # 挂载项目代码
+      - ..:/app:cached
+      # 挂载 Go 模块缓存
+      - go-mod-cache:/go/pkg/mod
+      # 挂载 Node.js 缓存
+      - node-modules-cache:/app/node_modules
+    working_dir: /app # 重要：设置工作目录
+    ports:
+      - "3000:3000" # React 开发服务器
+      - "8080:8080" # Go API 服务器
+    command: sleep infinity
+    networks:
+      - blog-network
+
+  # 可选：数据库服务
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: blog_dev
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - blog-network
+
+  # Redis缓存（可选）
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  go-mod-cache:
+  node-modules-cache:
+  postgres-data:
