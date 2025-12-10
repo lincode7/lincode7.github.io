@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { HelmetProvider } from "react-helmet-async";
 import {
   Route,
@@ -9,6 +10,10 @@ import {
 import Layout from "./components/layout";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { Buffer } from "buffer";
+
+// @ts-ignore
+window.Buffer = Buffer;
 
 // 代码分割和懒加载
 const Home = lazy(() => import("./pages/Home"));
@@ -83,16 +88,24 @@ function App() {
           <AppInitializer />
           <ScrollToTop />
           <Layout>
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/blog" element={<BlogHome />} />
-                <Route path="/blog/:tag" element={<BlogList />} />
-                <Route path="/blog/:tag/:id" element={<BlogPost />} />
-                <Route path="/interests" element={<Interests />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <ErrorBoundary
+              fallback={
+                <div className="flex-center">
+                  <p>⚠️Something went wrong</p>
+                </div>
+              }
+            >
+              <Suspense fallback={<LoadingSpinner />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/blog" element={<BlogHome />} />
+                  <Route path="/blog/:tag" element={<BlogList />} />
+                  <Route path="/blog/:tag/:id" element={<BlogPost />} />
+                  <Route path="/interests" element={<Interests />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </Layout>
         </Router>
       </ThemeProvider>

@@ -1,3 +1,7 @@
+import matter from "gray-matter";
+import hljs from "highlight.js";
+import { marked } from "marked";
+import { markedHighlight } from "marked-highlight";
 import type { BlogPost, InterestItem, TagCount } from "../types";
 
 // 模拟延迟
@@ -55,72 +59,35 @@ export const blogAPI = {
   },
 
   // 获取单篇博客
-  async getPost(id: string): Promise<BlogPost> {
-    await delay(200);
+  async getPost(id: string): Promise<{ meta: BlogPost; html: string }> {
+    const r = await fetch(`/content/posts/${id}.md`);
 
-    const mockPost: BlogPost = {
-      id: id,
-      title: "React 性能优化指南",
-      content: `# React 性能优化指南
+    if (!r.ok) throw Error(`HTTP error! status: ${r.status}`);
 
-## 前言
-在现代Web应用中，性能是用户体验的关键因素之一。React作为一个声明式的UI库，虽然为我们提供了高效的更新机制，但在复杂应用中仍需要注意性能优化。
+    const { data: meta, content } = matter(await r.text());
+    const html = await marked
+      // .use(markedCodePreview())
+      // .use(markedCodeFormat())
+      .use(
+        markedHighlight({
+          emptyLangClass: "hljs",
+          langPrefix: "hljs language-",
+          highlight(code, lang) {
+            const language = hljs.getLanguage(lang) ? lang : "shell";
+            return hljs.highlight(code, { language }).value;
+          },
+        })
+      )
 
-## 核心优化技巧
+      .parse(content, {
+        gfm: true,
+        breaks: true,
+      });
 
-### 1. 使用React.memo
-\`\`\`jsx
-const MyComponent = React.memo(function MyComponent(props) {
-  /* 只在props改变时重新渲染 */
-});
-\`\`\`
-
-### 2. 使用useCallback和useMemo
-\`\`\`jsx
-const memoizedCallback = useCallback(() => {
-  doSomething(a, b);
-}, [a, b]);
-
-const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
-\`\`\`
-
-### 3. 虚拟化长列表
-对于长列表，使用虚拟化技术只渲染可见部分：
-- react-window
-- react-virtualized
-
-### 4. 代码分割
-使用React.lazy和Suspense实现按需加载：
-\`\`\`jsx
-const OtherComponent = React.lazy(() => import('./OtherComponent'));
-
-function MyComponent() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <OtherComponent />
-    </Suspense>
-  );
-}
-\`\`\`
-
-## 性能监控工具
-
-1. **React DevTools Profiler**
-2. **Chrome Performance Tab**
-3. **Lighthouse**
-
-## 总结
-性能优化是一个持续的过程，需要根据应用的具体情况进行调整。`,
-      excerpt: "深入探讨React应用性能优化的各种技巧",
-      date: "2024-01-15",
-      tags: ["React", "性能优化", "前端", "JavaScript"],
-      readTime: 8,
-      category: "技术",
-      coverImage:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800",
+    return {
+      meta: meta as BlogPost,
+      html,
     };
-
-    return mockPost;
   },
 
   // 获取标签统计
