@@ -1,0 +1,33 @@
+/* src/styles/responsive.css */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 1rem;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tag-cloud-container {
+    height: 400px;
+  }
+
+  .blog-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .blog-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

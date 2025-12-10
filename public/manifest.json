@@ -1,0 +1,47 @@
+{
+  "short_name": "Xuanlin's Blog",
+  "name": "个人主页 - 博客与兴趣展示",
+  "description": "一个展示个人博客和兴趣爱好的现代化网站",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["personal", "blog", "portfolio"],
+  "shortcuts": [
+    {
+      "name": "博客首页",
+      "short_name": "博客",
+      "description": "查看博客标签云",
+      "url": "/blog",
+      "icons": [{ "src": "blog_icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "兴趣主页",
+      "short_name": "兴趣",
+      "description": "查看游戏、电影、音乐和旅行记录",
+      "url": "/interests",
+      "icons": [{ "src": "interests_icon.png", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+.contact-info {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-info.clickable {
+  cursor: pointer;
+}
+
+.contact-info.clickable:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.contact-info::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contact-info.clickable:hover::before {
+  opacity: 1;
+}
+
+.contact-info-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contact-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.contact-info.clickable:hover .contact-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.verified-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--card-bg);
+}
+
+.contact-label-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-description {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.copy-button {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.copy-button.copied {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.copy-tooltip {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.375rem 0.75rem;
+  background: var(--text-color);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+  animation: fadeIn 0.2s ease;
+}
+
+.copy-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--text-color);
+}
+
+.contact-info-content {
+  margin-bottom: 1rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid transparent;
+}
+
+.contact-link:hover {
+  color: var(--secondary-color);
+  border-bottom-color: currentColor;
+  gap: 0.75rem;
+}
+
+.contact-link .external-icon {
+  transition: transform 0.2s ease;
+}
+
+.contact-link:hover .external-icon {
+  transform: translateX(2px) translateY(-2px);
+}
+
+.contact-value {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.contact-info-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.contact-type-indicator {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.type-label {
+  padding: 0.25rem 0.75rem;
+  background: var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 类型特定样式 */
+.contact-info[data-type="email"] .contact-icon {
+  background: linear-gradient(135deg, #ea4335, #fbbc05);
+}
+
+.contact-info[data-type="phone"] .contact-icon {
+  background: linear-gradient(135deg, #34a853, #0f9d58);
+}
+
+.contact-info[data-type="location"] .contact-icon {
+  background: linear-gradient(135deg, #4285f4, #34a853);
+}
+
+.contact-info[data-type="social"] .contact-icon {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .contact-info {
+    padding: 1rem;
+  }
+
+  .contact-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .contact-link,
+  .contact-value {
+    font-size: 0.9375rem;
+  }
+
+  .contact-label {
+    font-size: 0.8125rem;
+  }
+
+  .copy-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .copy-button svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-info-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .contact-icon-wrapper {
+    order: 1;
+  }
+
+  .contact-label-wrapper {
+    order: 2;
+    flex: 2;
+  }
+
+  .copy-button {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .contact-info-content {
+    order: 4;
+    width: 100%;
+  }
+
+  .contact-info-footer {
+    order: 5;
+    width: 100%;
+  }
+}

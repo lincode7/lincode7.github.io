@@ -1,0 +1,213 @@
+.breadcrumb-nav {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(10px);
+  background-color: rgba(var(--card-bg-rgb), 0.95);
+}
+
+.breadcrumb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.breadcrumb-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(37, 99, 235, 0.1),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.breadcrumb-item:hover::before {
+  left: 100%;
+}
+
+.breadcrumb-item:hover {
+  color: var(--text-color);
+  background: var(--border-color);
+}
+
+.breadcrumb-item.active {
+  color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.1);
+  font-weight: 600;
+  cursor: default;
+}
+
+.breadcrumb-item.active::before {
+  display: none;
+}
+
+.breadcrumb-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.breadcrumb-item.active .breadcrumb-icon {
+  opacity: 1;
+}
+
+.breadcrumb-separator {
+  color: var(--border-color);
+  flex-shrink: 0;
+  margin: 0 0.25rem;
+}
+
+/* 当前页面标题 */
+.current-page-title {
+  display: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-left: auto;
+  padding: 0.375rem 0.75rem;
+  background: rgba(37, 99, 235, 0.1);
+  border-radius: 2rem;
+}
+
+/* 进度指示器 */
+.breadcrumb-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  transition: width 0.3s ease;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .breadcrumb-nav {
+    padding: 0.5rem 0;
+  }
+
+  .breadcrumb-container {
+    padding: 0 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .breadcrumb-item {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.375rem;
+  }
+
+  .breadcrumb-separator {
+    margin: 0 0.125rem;
+  }
+
+  .current-page-title {
+    display: inline-block;
+  }
+
+  /* 移动端隐藏部分面包屑 */
+  .breadcrumb-item:nth-last-child(n + 3) {
+    display: none;
+  }
+
+  .breadcrumb-item:nth-last-child(2)::before {
+    content: "...";
+    margin-right: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-container {
+    padding: 0 0.5rem;
+  }
+
+  .breadcrumb-item {
+    font-size: 0.75rem;
+  }
+
+  .breadcrumb-icon {
+    display: none;
+  }
+}
+
+/* 动画效果 */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.breadcrumb-item {
+  animation: slideInFromLeft 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+.breadcrumb-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.breadcrumb-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.breadcrumb-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.breadcrumb-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* 悬停效果增强 */
+.breadcrumb-item:not(.active):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumb-item:not(.active):active {
+  transform: translateY(0);
+}
+
+/* 键盘导航支持 */
+.breadcrumb-item:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

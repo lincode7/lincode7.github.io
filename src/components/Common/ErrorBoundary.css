@@ -1,0 +1,93 @@
+.error-boundary {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.error-icon {
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+}
+
+.error-content h2 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.error-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.error-details {
+  text-align: left;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.error-message {
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.error-stack {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.error-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-button-retry {
+  background: var(--primary-color);
+  color: white;
+}
+
+.error-button-retry:hover {
+  background: var(--secondary-color);
+}
+
+.error-button-reload {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+.error-button-reload:hover {
+  background: var(--border-color);
+  opacity: 0.9;
+}
