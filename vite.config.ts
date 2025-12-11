@@ -48,7 +48,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
-          utils: ["date-fns", "gray-matter"],
+          markdown: ["marked", "marked-highlight", "highlight.js"],
+          utils: ["gray-matter"],
         },
       },
     },
