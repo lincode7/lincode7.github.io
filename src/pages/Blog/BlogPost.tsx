@@ -10,17 +10,23 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
+import type { BlogPost } from "../../types";
 import { blogAPI } from "../../utils/api";
 import { formatDate } from "../../utils/helper";
+import pharse from "../../utils/mardownPhaser";
 import { createSuspenseResource } from "../../utils/suspense";
 
-const postResource = createSuspenseResource(blogAPI.getPost);
+const postResource = createSuspenseResource(async (id) => {
+  const text = await blogAPI.getPost(id);
+  return await pharse(text);
+});
 
 export default function BlogPost() {
   const { id, tag } = useParams<{ id: string; tag: string }>();
   const navigate = useNavigate();
   const [views, setViews] = useState(0);
-  const post = postResource.read(id!);
+  const { data, html } = postResource.read(id!);
+  const post = data as BlogPost;
 
   useEffect(() => {
     // 增加阅读次数
@@ -36,8 +42,8 @@ export default function BlogPost() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: post.meta.title,
-          text: post.meta.excerpt,
+          title: post.title,
+          text: post.excerpt,
           url: window.location.href,
         });
       } catch (err) {
@@ -50,7 +56,7 @@ export default function BlogPost() {
     }
   };
 
-  if (!id || !post || !post.html) {
+  if (!id || !post || !html) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4 text-foreground/50">
@@ -70,10 +76,10 @@ export default function BlogPost() {
   return (
     <>
       <MetaTags
-        title={post.meta.title}
-        description={post.meta.excerpt}
-        keywords={post.meta.tags}
-        image={post.meta.coverImage}
+        title={post.title}
+        description={post.excerpt}
+        keywords={post.tags}
+        image={post.coverImage}
         type="article"
       />
 
@@ -89,10 +95,10 @@ export default function BlogPost() {
 
         {/* 文章头部 */}
         <header className="mb-8">
-          {post.meta.coverImage && (
+          {post.coverImage && (
             <img
-              src={post.meta.coverImage}
-              alt={post.meta.title}
+              src={post.coverImage}
+              alt={post.title}
               className="w-full h-64 object-cover rounded-xl mb-6"
               loading="lazy"
             />
@@ -101,11 +107,11 @@ export default function BlogPost() {
           <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
             <span className="flex items-center gap-1">
               <Calendar size={14} />
-              {formatDate(post.meta.date)}
+              {formatDate(post.date)}
             </span>
             <span className="flex items-center gap-1">
               <Clock size={14} />
-              {post.meta.readTime} 分钟阅读
+              {post.readTime} 分钟阅读
             </span>
             <span className="flex items-center gap-1">
               <Eye size={14} />
@@ -113,13 +119,13 @@ export default function BlogPost() {
             </span>
           </div>
 
-          <h1 className="text-4xl font-bold mb-4">{post.meta.title}</h1>
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
 
           <div className="flex-wrap items-center gap-2 mb-6">
             <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-              {post.meta.category}
+              {post.category}
             </span>
-            {post.meta.tags.map((tag) => (
+            {post.tags.map((tag) => (
               <span
                 key={tag}
                 className="flex items-center gap-1 px-3 py-1 bg-secondary/20 text-secondary-foreground rounded-full text-sm"
@@ -134,7 +140,7 @@ export default function BlogPost() {
         {/* 文章内容 */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <div
-            dangerouslySetInnerHTML={{ __html: post.html }}
+            dangerouslySetInnerHTML={{ __html: html }}
             className="blog-content"
           />
         </div>
@@ -161,7 +167,7 @@ export default function BlogPost() {
             </div>
 
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              <p>最后更新: {formatDate(post.meta.date)}</p>
+              <p>最后更新: {formatDate(post.date)}</p>
             </div>
           </div>
 

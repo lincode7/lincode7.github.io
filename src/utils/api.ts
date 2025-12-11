@@ -1,7 +1,3 @@
-import matter from "gray-matter";
-import hljs from "highlight.js";
-import { marked } from "marked";
-import { markedHighlight } from "marked-highlight";
 import type { BlogPost, InterestItem, TagCount } from "../types";
 
 // 模拟延迟
@@ -59,35 +55,12 @@ export const blogAPI = {
   },
 
   // 获取单篇博客
-  async getPost(id: string): Promise<{ meta: BlogPost; html: string }> {
+  async getPost(id: string) {
     const r = await fetch(`/content/posts/${id}.md`);
 
     if (!r.ok) throw Error(`HTTP error! status: ${r.status}`);
 
-    const { data: meta, content } = matter(await r.text());
-    const html = await marked
-      // .use(markedCodePreview())
-      // .use(markedCodeFormat())
-      .use(
-        markedHighlight({
-          emptyLangClass: "hljs",
-          langPrefix: "hljs language-",
-          highlight(code, lang) {
-            const language = hljs.getLanguage(lang) ? lang : "shell";
-            return hljs.highlight(code, { language }).value;
-          },
-        })
-      )
-
-      .parse(content, {
-        gfm: true,
-        breaks: true,
-      });
-
-    return {
-      meta: meta as BlogPost,
-      html,
-    };
+    return r.text();
   },
 
   // 获取标签统计
