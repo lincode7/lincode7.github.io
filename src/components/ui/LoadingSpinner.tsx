@@ -14,7 +14,7 @@ export default function LoadingSpinner({
   };
 
   return (
-    <div className="flex-col-center min-h-[200px] gap-4">
+    <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
       <div
         className={`${sizeClasses[size]} border-b-2 border-primary rounded-full animate-spin inline-block`}
       />

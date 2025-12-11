@@ -292,13 +292,13 @@ export default function TagCloud({
 
       {/* 图例 */}
       {showLegend && (
-        <div className="flex-col gap-6">
+        <div className="flex flex-col gap-6">
           <div className="flex-left gap-3 pb-4 border-b">
             <Tag size={20} className="text-blue-600 dark:text-blue-400" />
             <h3 className="m-0">标签统计</h3>
           </div>
 
-          <div className="flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <StatCard
               className="p-4"
               icon={BarChart3}

@@ -28,7 +28,7 @@ function BlogList({ tag, posts }: BlogListProps) {
           key={post.id}
           className="card hover-shadow p-6 animate-slide-up"
         >
-          <div className="flex-col gap-6">
+          <div className="flex flex-col gap-6">
             {/* 头图 */}
             {post.coverImage && (
               <img
@@ -61,7 +61,7 @@ function BlogList({ tag, posts }: BlogListProps) {
             {/* 摘要 */}
             <p className="mb-4">{post.excerpt}</p>
             {/* 标签 */}
-            <div className="flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Tag size={14} className="text-gray-400" />
               {post.tags.map((tag) => (
                 <span

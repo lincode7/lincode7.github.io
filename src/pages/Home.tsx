@@ -57,13 +57,13 @@ export default function Home() {
         {/* 个人信息区域 */}
         <div className=" mb-12 relative after:absolute after:h-0.5 after:w-max after:shadow-sm">
           {/* 个人信息 */}
-          <div className="mb-8 flex-left flex-col md:flex-row gap-6">
+          <div className="mb-8 flex-center flex-col md:flex-row gap-6">
             <img
               src={SITE_CONFIG.author.avatar}
               alt="个人头像"
               className="avatar"
             />
-            <div className="flex-col">
+            <div className="flex flex-col">
               <h1 className="text-center md:text-left">
                 {SITE_CONFIG.author.name}
               </h1>
@@ -137,7 +137,7 @@ export default function Home() {
         {/* 近期博客分类 */}
         <Card hover={false}>
           <h2 className="bootom-line">近期博客分类</h2>
-          <div className="flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             {stats.recentTags.map((tag, index) => (
               <span key={index} className="tag">
                 {tag.category}

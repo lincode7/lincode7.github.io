@@ -46,7 +46,7 @@ export default function NotFound() {
             </ul>
           </div>
 
-          <div className="flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/"
               className="btn-primary flex items-center gap-2 px-6 py-3"

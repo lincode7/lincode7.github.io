@@ -121,7 +121,7 @@ export default function BlogPost() {
 
           <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
 
-          <div className="flex-wrap items-center gap-2 mb-6">
+          <div className="flex flex-wrap items-center gap-2 mb-6">
             <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
               {post.category}
             </span>
@@ -147,7 +147,7 @@ export default function BlogPost() {
 
         {/* 文章尾部 */}
         <footer className="mt-12 pt-8 border-t">
-          <div className="flex-wrap justify-between items-center gap-4">
+          <div className="flex flex-wrap justify-between items-center gap-4">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleShare}

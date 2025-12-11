@@ -43,7 +43,7 @@ export default function Interests() {
       />
 
       <div className="container mx-auto px-4 py-8 animate-slide-up">
-        <div className="flex-col-left mb-6">
+        <div className="flex flex-col-left mb-6">
           <h1 className="mb-2">兴趣主页</h1>
           <p>记录生活中的美好瞬间和兴趣爱好</p>
         </div>

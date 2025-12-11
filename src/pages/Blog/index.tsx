@@ -41,7 +41,7 @@ export default function TagCloudPage() {
             </div>
           </div>
 
-          <div className="flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             {filteredTags.map((tag) => (
               <button key={tag.name} onClick={() => handleTagClick(tag.name)}>
                 <div className="px-5 py-2.5 rounded-full shadow-md border border-foreground/10 hover-shadow">

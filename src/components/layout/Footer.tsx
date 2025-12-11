@@ -22,7 +22,7 @@ export default function Footer() {
           {/* 技术栈 */}
           <div>
             <h3>技术栈</h3>
-            <div className="flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {TECH_STACK.map((tech) => (
                 <span key={tech} className="tag text-xs">
                   {tech}

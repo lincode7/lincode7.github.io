@@ -195,7 +195,7 @@ export default function Header() {
             className="md:hidden border-b"
           >
             <div className="container mx-auto px-4 py-4">
-              <nav className="flex-col gap-2">
+              <nav className="flex flex-col gap-2">
                 {NAVIGATION.map((item) => (
                   <Link
                     key={item.path}

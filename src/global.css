@@ -252,22 +252,6 @@
     @apply flex items-center justify-around;
   }
 
-  .flex-wrap {
-    @apply flex flex-wrap;
-  }
-
-  .flex-col {
-    @apply flex flex-col;
-  }
-
-  .flex-col-center {
-    @apply flex flex-col items-center justify-center;
-  }
-
-  .flex-row {
-    @apply flex flex-row;
-  }
-
   /* 文本截断 */
   .line-clamp-1 {
     overflow: hidden;
