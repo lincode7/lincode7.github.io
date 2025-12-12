@@ -1,0 +1,14 @@
+const t=`{
+  "type": "game",
+  "title": "博德之门3",
+  "platform": ["PC", "PS5"],
+  "tags": ["角色扮演", "策略"],
+  "status": "playing",
+  "hours": 45,
+  "date": "2024-12-15",
+  "rating": 5,
+  "description": "年度最佳游戏，丰富的角色和深度的剧情选择",
+  "image": "https://tse2-mm.cn.bing.net/th/id/OIP-C.z-sgJD5LgJFzLVcLHTl2UQHaEK?w=272&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.1&pid=1.7&rm=3&ucfimg=1",
+  "link": "https://store.steampowered.com/app/1086940/"
+}
+`;export{t as default};

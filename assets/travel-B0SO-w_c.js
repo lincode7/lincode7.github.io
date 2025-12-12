@@ -1,0 +1,13 @@
+const t=`{
+  "type": "travel",
+  "id": "travel-001",
+  "title": "日本·京都",
+  "date": "2024-12-15",
+  "period": "2023-11-10 至 2023-11-17",
+  "tags": ["伏见稻荷大社的千本鸟居", "岚山竹林小径", "清水寺夜间特别参拜"],
+  "photos": 320,
+  "rating": 5,
+  "description": "秋天的京都美不胜收，红叶与古建筑相得益彰",
+  "image": "https://tse3-mm.cn.bing.net/th/id/OIP-C.gVGWsdLyY6-8YjMWMrr-GQHaJQ?w=125&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.1&pid=1.7&rm=3&ucfimg=1"
+}
+`;export{t as default};

@@ -1,4 +1,4 @@
----
+const n=`---
 title: "TypeScript高级类型编程"
 date: "2024-01-25"
 tags: ["TypeScript", "类型系统", "前端"]
@@ -16,29 +16,29 @@ TypeScript 的类型系统不仅提供了基本的类型检查，还包含了一
 
 条件类型允许我们根据输入类型来选择输出类型，类似于 JavaScript 中的三元运算符。
 
-```typescript
+\`\`\`typescript
 type IsString<T> = T extends string ? true : false;
 
 type A = IsString<"hello">; // true
 type B = IsString<42>; // false
-```
+\`\`\`
 
 ## infer 关键字
 
 infer 关键字用于在条件类型中提取类型信息：
 
-```typescript
+\`\`\`typescript
 type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
 
 type Func = () => string;
 type R = ReturnType<Func>; // string
-```
+\`\`\`
 
 ## 映射类型 (Mapped Types)
 
 映射类型允许我们基于现有类型创建新的类型：
 
-```typescript
+\`\`\`typescript
 // 让所有属性变为可选
 type Partial<T> = {
   [P in keyof T]?: T[P];
@@ -62,32 +62,32 @@ interface User {
 
 type RequiredUser = Required<User>;
 // { id: number, name: string }
-```
+\`\`\`
 
 ## 模板字面量类型 (Template Literal Types)
 
 TypeScript 4.1 引入了模板字面量类型，可以像字符串模板一样操作类型：
 
-```typescript
+\`\`\`typescript
 type EventName = "click" | "scroll" | "mousemove";
-type HandlerName = `on${Capitalize<EventName>}`;
+type HandlerName = \`on\${Capitalize<EventName>}\`;
 
 // 'onClick' | 'onScroll' | 'onMousemove'
 
 // 更复杂的例子
 type PropGetter<T extends string> = {
-  [K in `get${Capitalize<T>}`]: () => string;
+  [K in \`get\${Capitalize<T>}\`]: () => string;
 };
 
 type UserProps = PropGetter<"name" | "age">;
 // { getName: () => string, getAge: () => string }
-```
+\`\`\`
 
 ## 实用类型工具
 
 1. **Pick 和 Omit**
 
-```typescript
+\`\`\`typescript
 interface Todo {
   title: string;
   description: string;
@@ -102,11 +102,11 @@ type TodoPreview = Pick<Todo, "title" | "completed">;
 // 排除特定属性
 type TodoInfo = Omit<Todo, "completed" | "createdAt">;
 // { title: string, description: string }
-```
+\`\`\`
 
 2. **Extract 和 Exclude**
 
-```typescript
+\`\`\`typescript
 type T0 = Extract<"a" | "b" | "c", "a" | "f">; // 'a'
 type T1 = Exclude<"a" | "b" | "c", "a" | "b">; // 'c'
 
@@ -116,13 +116,13 @@ type FunctionKeys<T> = {
 }[keyof T];
 
 type Methods<T> = Pick<T, FunctionKeys<T>>;
-```
+\`\`\`
 
 ## 递归类型
 
 TypeScript 支持递归类型定义，这对于处理嵌套数据结构非常有用：
 
-```typescript
+\`\`\`typescript
 // JSON值的类型定义
 type JSONValue =
   | string
@@ -146,11 +146,11 @@ interface NestedObject {
 }
 
 type ReadonlyNested = DeepReadonly<NestedObject>;
-```
+\`\`\`
 
 ## 类型守卫和自定义类型保护
 
-```typescript
+\`\`\`typescript
 // 类型守卫函数
 function isString(value: unknown): value is string {
   return typeof value === "string";
@@ -176,13 +176,13 @@ function petAction(pet: Cat | Dog) {
     pet.bark(); // TypeScript知道这是Dog类型
   }
 }
-```
+\`\`\`
 
 ## 实际应用案例
 
 ### 1. API 响应类型安全
 
-```typescript
+\`\`\`typescript
 // 定义API响应格式
 interface ApiResponse<T = any> {
   data: T;
@@ -205,11 +205,11 @@ interface User {
 
 const userResponse = await fetchApi<User>("/api/user/1");
 // userResponse.data的类型是User
-```
+\`\`\`
 
 ### 2. 表单验证
 
-```typescript
+\`\`\`typescript
 // 定义表单字段
 type FormField<T> = {
   value: T;
@@ -233,7 +233,7 @@ interface LoginForm {
 }
 
 type LoginFormState = FormState<LoginForm>;
-```
+\`\`\`
 
 ## 性能考虑
 
@@ -259,3 +259,4 @@ TypeScript Handbook [https://www.typescriptlang.org/docs/handbook/intro.html]
 TypeScript Deep Dive [https://basarat.gitbook.io/typescript/]
 
 Type Challenges [https://github.com/type-challenges/type-challenges]
+`;export{n as default};

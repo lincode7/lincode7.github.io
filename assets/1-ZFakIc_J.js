@@ -1,4 +1,4 @@
----
+const n=`---
 title: "React Hooks 深度解析"
 date: "2024-01-20"
 tags: ["React", "Hooks", "前端", "JavaScript"]
@@ -16,9 +16,9 @@ readTime: 5
 
 ### 1. useState
 
-`useState` 是最基础的 Hook，用于在函数组件中添加状态。
+\`useState\` 是最基础的 Hook，用于在函数组件中添加状态。
 
-```jsx
+\`\`\`jsx
 import { useState } from "react";
 
 function Counter() {
@@ -31,7 +31,7 @@ function Counter() {
     </div>
   );
 }
-```
+\`\`\`
 
 **注意事项：**
 
@@ -41,9 +41,9 @@ function Counter() {
 
 ### 2. useEffect
 
-`useEffect` 用于处理副作用操作，可以看作是 componentDidMount、componentDidUpdate 和 componentWillUnmount 的组合。
+\`useEffect\` 用于处理副作用操作，可以看作是 componentDidMount、componentDidUpdate 和 componentWillUnmount 的组合。
 
-```jsx
+\`\`\`jsx
 import { useState, useEffect } from "react";
 
 function Timer() {
@@ -60,7 +60,7 @@ function Timer() {
 
   return <div>已经过去 {seconds} 秒</div>;
 }
-```
+\`\`\`
 
 **依赖数组的三种情况：**
 
@@ -72,7 +72,7 @@ function Timer() {
 
 这两个 Hook 用于性能优化，避免不必要的计算和渲染。
 
-```jsx
+\`\`\`jsx
 import { useMemo, useCallback, useState } from "react";
 
 function ExpensiveComponent({ items }) {
@@ -97,13 +97,13 @@ function ExpensiveComponent({ items }) {
     </div>
   );
 }
-```
+\`\`\`
 
 ## 自定义 Hooks
 
 自定义 Hook 是复用状态逻辑的最佳方式。它其实就是一个普通的 JavaScript 函数，但在其中可以调用其他 Hook。
 
-```jsx
+\`\`\`jsx
 // 自定义Hook：获取窗口尺寸
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -137,7 +137,7 @@ function ResponsiveComponent() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## 最佳实践
 
@@ -174,3 +174,4 @@ React Hooks 彻底改变了我们编写 React 组件的方式。它们让逻辑�
 - 官方 Hooks 文档 [https://reactjs.org/docs/hooks-intro.html]
 - useHooks [https://usehooks.com/] - 实用自定义 Hooks 集合
 - React Hooks 常见问题 [https://reactjs.org/docs/hooks-faq.html]
+`;export{n as default};
