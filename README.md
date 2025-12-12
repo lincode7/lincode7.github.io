@@ -21,3 +21,45 @@
 git clone https://github.com/yourusername/your-repo.git
 cd your-repo
 ```
+
+### 2. 新增markdown博客
+
+博客文件目录：`/content/posts/`
+
+markdown格式：头信息+正文
+
+```markdown
+---
+title: "博客标题"
+date: "创建日期"
+tags: ["标签"]
+category: "分类"
+excerpt: "摘要"
+coverImage: "头图（可选）"
+readTime: 5（可选，阅读时间，分钟）
+---
+
+正文
+```
+
+### 3.  新增兴趣项
+
+兴趣数据目录：`/content/interests/`
+
+文件格式：`json`
+
+根据兴趣类型创建相应文件夹，如：`/content/interests/games/1.json`
+
+json文件格式:
+
+```json
+{
+
+}
+```
+
+### 4. 构建&部署
+
+```bash
+npm run depoly
+```

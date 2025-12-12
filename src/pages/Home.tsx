@@ -11,7 +11,7 @@ import MetaTags from "../components/seo/MetaTags";
 import { Card } from "../components/ui/Card";
 import ContactInfo from "../components/ui/ContactInfo";
 import StatCard from "../components/ui/StatsCard";
-import { blogAPI } from "../utils/api";
+import { blogAPI } from "../utils/api/posts";
 import { SITE_CONFIG } from "../utils/constants";
 import { createSuspenseResource } from "../utils/suspense";
 
@@ -59,6 +59,7 @@ export default function Home() {
                     case "github":
                       return (
                         <ContactInfo
+                          key={key}
                           icon={Github}
                           value={value}
                           link={`https://github.com/${value}`}
@@ -67,20 +68,31 @@ export default function Home() {
                     case "email":
                       return (
                         <ContactInfo
+                          key={key}
                           icon={Mail}
                           value={value}
                           link={`mailto:${value}`}
                         />
                       );
                     case "phone":
-                      return <ContactInfo icon={PhoneCall} value={value} />;
+                      return (
+                        <ContactInfo key={key} icon={PhoneCall} value={value} />
+                      );
                     case "wechat":
                       return (
-                        <ContactInfo icon={MessageCircleMore} value={value} />
+                        <ContactInfo
+                          key={key}
+                          icon={MessageCircleMore}
+                          value={value}
+                        />
                       );
                     case "qq":
                       return (
-                        <ContactInfo icon={MessageCircleMore} value={value} />
+                        <ContactInfo
+                          key={key}
+                          icon={MessageCircleMore}
+                          value={value}
+                        />
                       );
                   }
                 }
@@ -101,8 +113,8 @@ export default function Home() {
             />
             <StatCard
               icon={Calendar}
-              title="本月更新"
-              value={stats.monthly.length ? stats.monthly[0].count : 0}
+              title="最近更新"
+              value={stats.recentCount}
               description={"近期活跃"}
             />
           </div>

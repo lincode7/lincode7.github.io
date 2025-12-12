@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
-import { blogAPI } from "../../utils/api";
+import { blogAPI } from "../../utils/api/posts";
 import { formatDate } from "../../utils/helper";
 import pharse from "../../utils/mardownPhaser";
 import { createSuspenseResource } from "../../utils/suspense";
@@ -108,10 +108,12 @@ export default function BlogPost() {
               <Calendar size={14} />
               {formatDate(post.date)}
             </span>
-            <span className="flex items-center gap-1">
-              <Clock size={14} />
-              {post.readTime} 分钟阅读
-            </span>
+            {post.readTime && (
+              <span className="flex items-center gap-1">
+                <Clock size={14} />
+                {post.readTime} 分钟阅读
+              </span>
+            )}
             <span className="flex items-center gap-1">
               <Eye size={14} />
               {views} 次阅读

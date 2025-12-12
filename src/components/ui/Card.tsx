@@ -32,11 +32,7 @@ interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <div
-        ref={ref}
-        className={cn("flex flex-col space-y-1.5 p-6 pb-0", className)}
-        {...props}
-      >
+      <div ref={ref} className={cn("space-y-1.5", className)} {...props}>
         {children}
       </div>
     );
@@ -96,7 +92,7 @@ interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
 const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("p-6", className)} {...props}>
+      <div ref={ref} className={cn("space-y-1", className)} {...props}>
         {children}
       </div>
     );
@@ -115,7 +111,7 @@ const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex items-center p-6 pt-0", className)}
+        className={cn("flex-center gap-1.5", className)}
         {...props}
       >
         {children}

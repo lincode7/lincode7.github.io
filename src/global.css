@@ -188,7 +188,7 @@
   }
 
   .card {
-    @apply bg-card text-card-foreground rounded-lg border shadow-md p-8 bg-linear-to-br from-accent to-background;
+    @apply bg-card text-card-foreground rounded-lg border shadow-md p-4 md:p-5 lg:p-6  bg-linear-to-br from-accent to-background;
   }
 
   .hover-shadow {

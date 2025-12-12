@@ -2,8 +2,8 @@ import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
-import type { Post } from "../../types";
-import { blogAPI } from "../../utils/api";
+import type { Post } from "../../types/post";
+import { blogAPI } from "../../utils/api/posts";
 import { formatDate } from "../../utils/helper";
 import { createSuspenseResource } from "../../utils/suspense";
 

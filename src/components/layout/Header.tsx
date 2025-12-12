@@ -25,7 +25,7 @@ const breadcrumbConfig: Record<string, { label: string; path: string }[]> = {
   ],
   "/interests": [
     { label: "首页", path: "/" },
-    { label: "兴趣主页", path: "/interests" },
+    { label: "兴趣", path: "/interests" },
   ],
 };
 

@@ -40,10 +40,3 @@ export const TECH_STACK = [
   "PostgreSQL",
   "Docker",
 ];
-
-export const CATEGORIES = [
-  { id: "tech", name: "技术", color: "blue" },
-  { id: "life", name: "生活", color: "green" },
-  { id: "travel", name: "旅行", color: "orange" },
-  { id: "reading", name: "阅读", color: "purple" },
-];
