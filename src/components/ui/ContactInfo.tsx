@@ -48,10 +48,7 @@ export default function ContactInfo({
           <span className="font-bold">{value}</span>
         )}
       </div>
-      <button
-        className="cursor-pointer transition-all duration-200 ease-in-out hover:scale-105"
-        onClick={handleCopy}
-      >
+      <button className="cursor-pointer hover-scaled" onClick={handleCopy}>
         {copied ? <Check size={16} color="green" /> : <Copy size={16} />}
       </button>
     </div>

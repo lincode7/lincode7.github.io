@@ -28,10 +28,10 @@ export default function InterestCard({
 }: InterestCardProps) {
   return (
     <Card
-      className={`overflow-hidden break-inside-avoid p-2 mb-6 flex flex-col gap-1.5 hover:scale-105 group ${className}`}
+      className={`overflow-hidden break-inside-avoidmb-6 flex flex-col mb-4 gap-1.5 hover:p-2 hover:scale-105 group ${className}`}
     >
       <CardHeader>
-        <CardTitle className="group-hover-show">{data.title}</CardTitle>
+        <CardTitle>{data.title}</CardTitle>
 
         {data.image ? (
           <img
@@ -41,12 +41,10 @@ export default function InterestCard({
           />
         ) : null}
 
-        <CardDescription className="group-hover-show">
-          {data.description}
-        </CardDescription>
+        <CardDescription>{data.description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="group-hover-show">
+      <CardContent>
         {data.type === "music" && (data as MusicInterest).artist && (
           <p className="text-sm">艺术家: {(data as MusicInterest).artist}</p>
         )}
