@@ -176,7 +176,7 @@
   }
 
   .tag {
-    @apply relative px-4 py-2 bg-border rounded-full text-sm font-bold transition-all duration-200 ease-linear cursor-pointer overflow-hidden;
+    @apply relative px-4 py-2 bg-border rounded-full text-sm font-bold transition-transform duration-200 ease-in-out cursor-pointer overflow-hidden;
   }
 
   .tag:hover {
@@ -192,44 +192,23 @@
   }
 
   .hover-shadow {
-    @apply transition-all duration-300 hover:shadow-lg dark:hover:shadow-foreground/10;
+    @apply shadow-md transition-transform duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-foreground/10;
   }
 
   .hover-scaled {
-    @apply transition-all duration-300 hover:scale-105;
+    @apply transition-transform duration-300 ease-in-out hover:scale-105;
+  }
+
+  .group-hover-show {
+    @apply hidden transition-transform duration-300 ease-in-out group-hover:block;
   }
 
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors ease-in-out;
   }
 
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md font-medium transition-colors;
-  }
-
-  .tag-cloud-svg {
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-  }
-
-  .tag-cloud-svg g {
-    transition: transform 0.3s ease, filter 0.3s ease;
-  }
-
-  .tag-cloud-svg g:hover {
-    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.2));
-    z-index: 10;
-  }
-
-  .tag-cloud-svg text {
-    user-select: none;
-    pointer-events: none;
-  }
-
-  /* 键盘焦点样式 */
-  .tag-cloud-svg g:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 4px;
-    border-radius: 50%;
   }
 }
 

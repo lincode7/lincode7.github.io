@@ -20,14 +20,11 @@ export default function Interests() {
 
   return (
     <>
-      <MetaTags
-        title="兴趣主页 - 游戏、电影、音乐与旅行"
-        description="记录生活足迹"
-      />
+      <MetaTags title="Footmarks" description="记录生活足迹" />
 
       <div className="container mx-auto px-4 py-8 animate-slide-up">
         {/* 近期活动 */}
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6">
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {recentActivities.map((activity, index) => (
             <InterestCard
               key={index}
