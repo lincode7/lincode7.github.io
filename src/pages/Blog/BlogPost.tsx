@@ -30,9 +30,9 @@ export default function BlogPost() {
   useEffect(() => {
     // 增加阅读次数
     if (post) {
-      const storedViews = localStorage.getItem(id!);
+      const storedViews = localStorage.getItem(`post-${id}`);
       const newViews = storedViews ? parseInt(storedViews) + 1 : 1;
-      localStorage.setItem(id!, newViews.toString());
+      localStorage.setItem(`post-${id}`, newViews.toString());
       setViews(newViews);
     }
   }, [post]);
