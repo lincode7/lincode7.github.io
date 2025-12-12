@@ -2,14 +2,14 @@ import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
-import type { BlogPost } from "../../types";
+import type { Post } from "../../types";
 import { blogAPI } from "../../utils/api";
 import { formatDate } from "../../utils/helper";
 import { createSuspenseResource } from "../../utils/suspense";
 
 interface BlogListProps {
   tag: string;
-  posts: BlogPost[];
+  posts: Post[];
 }
 
 function BlogList({ tag, posts }: BlogListProps) {

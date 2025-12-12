@@ -1,9 +1,133 @@
-import type { BlogPost, InterestItem, TagCount } from "../types";
+import matter from "gray-matter";
+import type {
+  BlogRepo,
+  BlogStats,
+  CategoryStats,
+  InterestItem,
+  MonthlyStats,
+  Post,
+  PostFrontMatter,
+  TagStats,
+} from "../types";
 
 // 模拟延迟
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // 博客相关API
+async function getAllPost(): Promise<Post[]> {
+  const posts = import.meta.glob("/content/posts/*.md", {
+    query: "?raw", // 作为原始文本，而不是模块
+    import: "default", // 明确指定导入默认导出
+  });
+  const filePaths = Object.keys(posts);
+
+  const allPosts = filePaths.map(async (path) => {
+    const fileContent = await posts[path]();
+    const { data, content } = matter(fileContent);
+    return {
+      ...(data as PostFrontMatter),
+      id: path.match(/\/([^\/]+?)\.md$/)?.[1] || "",
+      content,
+    } as Post;
+  });
+
+  const result = await Promise.all(allPosts);
+  return (
+    result
+      // 按日期降序（最新的在前）
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  );
+}
+
+let repo: BlogRepo | undefined = undefined;
+async function generateBlogRepo(): Promise<BlogRepo> {
+  if (repo) return repo;
+
+  const posts = await getAllPost();
+
+  // 初始化统计结构
+  const byID: Record<string, Post> = {};
+  const categories: Record<string, CategoryStats> = {};
+  const tags: Record<string, TagStats> = {};
+  const monthly: Record<string, MonthlyStats> = {};
+
+  const postsByCategory: Record<string, string[]> = {};
+  const postsByTag: Record<string, string[]> = {};
+  const postsByMonth: Record<string, string[]> = {};
+
+  // 计算最近一周的时间范围
+  const rececnt = new Date(posts[0].date);
+  const oneWeekAgo = new Date(rececnt);
+  oneWeekAgo.setDate(rececnt.getDate() - 7);
+  const recentTags = new Set<string>();
+  const recentCategories = new Set<string>();
+
+  posts.forEach((post) => {
+    // index
+    if (!byID[post.id]) {
+      byID[post.id] = post;
+    }
+
+    // catergory
+    if (!categories[post.category]) {
+      categories[post.category] = { name: post.category, count: 0 };
+      postsByCategory[post.category] = [];
+    }
+    categories[post.category].count++;
+    postsByCategory[post.category].push(post.id);
+
+    // tag
+    post.tags.forEach((tag) => {
+      if (!tags[tag]) {
+        tags[tag] = { name: tag, count: 0 };
+        postsByTag[tag] = [];
+      }
+      tags[tag].count++;
+      postsByTag[tag].push(post.id);
+    });
+
+    const postDate = new Date(post.date);
+
+    // monthly
+    const yearMonth = postDate.toISOString().slice(0, 7); // "2024-01"
+    if (!monthly[yearMonth]) {
+      monthly[yearMonth] = { yearMonth, count: 0 };
+      postsByMonth[yearMonth] = [];
+    }
+    monthly[yearMonth].count++;
+    postsByMonth[yearMonth].push(post.id);
+
+    // recent Tags, Categories
+    if (postDate >= oneWeekAgo && postDate <= rececnt) {
+      post.tags.forEach((tag) => recentTags.add(tag));
+      recentCategories.add(post.category);
+    }
+  });
+
+  repo = {
+    stats: {
+      total: posts.length,
+      categories: Object.values(categories),
+      tags: Object.values(tags),
+      monthly: Object.values(monthly).sort(
+        (a, b) =>
+          new Date(b.yearMonth).getTime() - new Date(a.yearMonth).getTime()
+      ),
+      totalViews: 0,
+      recentTags: [...recentTags],
+      recentCategories: [...recentCategories],
+    },
+    index: {
+      byID,
+      byCategory: postsByCategory,
+      byTag: postsByTag,
+      byMonth: postsByMonth,
+    },
+  };
+
+  return repo;
+}
+
 export const blogAPI = {
   // 获取博客列表
   async getPosts(
@@ -11,74 +135,67 @@ export const blogAPI = {
     limit = 10,
     tag?: string
   ): Promise<{
-    posts: BlogPost[];
+    posts: Post[];
     total: number;
     page: number;
     limit: number;
   }> {
-    await delay(300); // 模拟网络延迟
-
-    // 模拟数据
-    const mockPosts: BlogPost[] = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 1}`,
-      title: `博客文章标题 ${i + 1}`,
-      content: `这是第 ${i + 1} 篇博客文章的内容...`,
-      excerpt: `这是第 ${
-        i + 1
-      } 篇博客文章的摘要，这里会简要介绍文章的主要内容。`,
-      date: new Date(Date.now() - i * 86400000).toISOString(), // 每天一篇
-      tags: i % 2 === 0 ? ["React", "前端"] : ["Node.js", "后端"],
-      readTime: Math.floor(Math.random() * 10) + 5,
-      category: i % 3 === 0 ? "技术" : i % 3 === 1 ? "生活" : "旅行",
-      coverImage:
-        i % 4 === 0
-          ? "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800"
-          : undefined,
-    }));
-
-    let filteredPosts = mockPosts;
-    if (tag) {
-      filteredPosts = mockPosts.filter((post) => post.tags.includes(tag));
-    }
+    const { index, stats } = await generateBlogRepo();
+    const { total } = stats;
+    const { byID, byTag } = index;
 
     // 分页
     const start = (page - 1) * limit;
     const end = start + limit;
-    const paginatedPosts = filteredPosts.slice(start, end);
+
+    // filter
+    if (tag) {
+      const ids = byTag[tag].slice(start, end);
+
+      return {
+        posts: ids.map((id) => byID[id]),
+        total: ids.length,
+        page,
+        limit,
+      };
+    }
 
     return {
-      posts: paginatedPosts,
-      total: filteredPosts.length,
+      posts: Object.values(byID).slice(start, end),
+      total,
       page,
       limit,
     };
   },
 
   // 获取单篇博客
-  async getPost(id: string) {
-    const r = await fetch(`/content/posts/${id}.md`);
+  async getPost(id: string): Promise<Post> {
+    const { index } = await generateBlogRepo();
+    return index.byID[id];
+  },
 
-    if (!r.ok) throw Error(`HTTP error! status: ${r.status}`);
-
-    return r.text();
+  // 获取分类统计
+  async getCategories(): Promise<CategoryStats[]> {
+    const { stats } = await generateBlogRepo();
+    return stats.categories;
   },
 
   // 获取标签统计
-  async getTags(): Promise<Array<TagCount>> {
-    await delay(150);
+  async getTags(): Promise<TagStats[]> {
+    const { stats } = await generateBlogRepo();
+    return stats.tags;
+  },
 
-    return [
-      { name: "React", count: 15, color: "#61dafb" },
-      { name: "TypeScript", count: 12, color: "#3178c6" },
-      { name: "Node.js", count: 8, color: "#68a063" },
-      { name: "CSS", count: 10, color: "#264de4" },
-      { name: "Webpack", count: 6, color: "#8dd6f9" },
-      { name: "Docker", count: 5, color: "#2496ed" },
-      { name: "算法", count: 7, color: "#f34b7d" },
-      { name: "设计模式", count: 4, color: "#ff6b6b" },
-      { name: "数据库", count: 6, color: "#4ecdc4" },
-      { name: "微服务", count: 3, color: "#45b7d1" },
-    ];
+  // 获取月度统计
+  async getMonthly(): Promise<MonthlyStats[]> {
+    const { stats } = await generateBlogRepo();
+    return stats.monthly;
+  },
+
+  // 获取综合统计
+  async getStats(): Promise<BlogStats> {
+    const { stats } = await generateBlogRepo();
+    return stats;
   },
 };
 
@@ -222,14 +339,4 @@ export const statsAPI = {
       },
     ];
   },
-};
-
-// 工具函数：处理API错误
-export const handleApiError = (error: unknown): string => {
-  if (error instanceof Error) {
-    console.error("API Error:", error.message);
-    return error.message;
-  }
-  console.error("Unknown API Error:", error);
-  return "未知错误";
 };

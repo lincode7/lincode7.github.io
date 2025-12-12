@@ -1,26 +1,55 @@
-export interface BlogPost {
-  id: string;
+export interface PostFrontMatter {
   title: string;
-  excerpt: string;
   date: string;
   tags: string[];
-  readTime: number;
   category: string;
+  excerpt: string;
   coverImage?: string;
+  readTime: number;
 }
 
-export interface TagCount {
+export interface PostMetadata extends PostFrontMatter {
+  id: string;
+}
+
+export interface Post extends PostMetadata {
+  content: string;
+}
+
+export interface CategoryStats {
   name: string;
   count: number;
-  color: string;
+}
+
+export interface TagStats extends CategoryStats {
+  color?: string;
+}
+
+export interface MonthlyStats {
+  yearMonth: string; // 格式: "2024-01"
+  count: number;
+}
+
+export interface BlogIndex {
+  byID: Record<string, Post>;
+  byCategory: Record<string, string[]>;
+  byTag: Record<string, string[]>;
+  byMonth: Record<string, string[]>;
 }
 
 export interface BlogStats {
-  totalPosts: number;
-  totalTags: number;
+  total: number;
+  categories: CategoryStats[];
+  tags: TagStats[];
+  monthly: MonthlyStats[];
   totalViews: number;
-  monthlyPosts: number;
   recentTags: string[];
+  recentCategories: string[];
+}
+
+export interface BlogRepo {
+  index: BlogIndex;
+  stats: BlogStats;
 }
 
 export interface InterestItem {
@@ -33,21 +62,4 @@ export interface InterestItem {
   rating?: number;
   image?: string;
   link?: string;
-}
-
-export interface ContactInfo {
-  github?: string;
-  email: string;
-  phone?: string;
-  location?: string;
-  wechat?: string;
-  qq?: string;
-}
-
-export interface UserInfo {
-  name: string;
-  title: string;
-  bio: string;
-  avatar: string;
-  contacts: ContactInfo;
 }

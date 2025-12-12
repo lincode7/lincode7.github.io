@@ -10,23 +10,22 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MetaTags from "../../components/seo/MetaTags";
-import type { BlogPost } from "../../types";
 import { blogAPI } from "../../utils/api";
 import { formatDate } from "../../utils/helper";
 import pharse from "../../utils/mardownPhaser";
 import { createSuspenseResource } from "../../utils/suspense";
 
 const postResource = createSuspenseResource(async (id) => {
-  const text = await blogAPI.getPost(id);
-  return await pharse(text);
+  const post = await blogAPI.getPost(id);
+  post.content = await pharse(post.content);
+  return post;
 });
 
 export default function BlogPost() {
   const { id, tag } = useParams<{ id: string; tag: string }>();
   const navigate = useNavigate();
   const [views, setViews] = useState(0);
-  const { data, html } = postResource.read(id!);
-  const post = data as BlogPost;
+  const post = postResource.read(id!);
 
   useEffect(() => {
     // 增加阅读次数
@@ -56,7 +55,7 @@ export default function BlogPost() {
     }
   };
 
-  if (!id || !post || !html) {
+  if (!id || !post) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4 text-foreground/50">
@@ -140,7 +139,7 @@ export default function BlogPost() {
         {/* 文章内容 */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <div
-            dangerouslySetInnerHTML={{ __html: html }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
             className="blog-content"
           />
         </div>

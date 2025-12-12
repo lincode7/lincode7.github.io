@@ -11,37 +11,11 @@ import MetaTags from "../components/seo/MetaTags";
 import { Card } from "../components/ui/Card";
 import ContactInfo from "../components/ui/ContactInfo";
 import StatCard from "../components/ui/StatsCard";
+import { blogAPI } from "../utils/api";
 import { SITE_CONFIG } from "../utils/constants";
 import { createSuspenseResource } from "../utils/suspense";
 
-interface BlogStats {
-  total: number;
-  recent: number;
-  recentTags: Array<{
-    category: string;
-    count: number;
-  }>;
-}
-
-const fetchBlogStats = async () =>
-  new Promise<BlogStats>((resolve) => {
-    // 这里实际应该调用API
-    setTimeout(
-      () =>
-        resolve({
-          total: 42,
-          recent: 5,
-          recentTags: [
-            { category: "react", count: 15 },
-            { category: "css", count: 10 },
-            { category: "html", count: 8 },
-          ],
-        }),
-      200
-    );
-  });
-
-const BlogStatsResource = createSuspenseResource(fetchBlogStats);
+const BlogStatsResource = createSuspenseResource(blogAPI.getStats);
 
 export default function Home() {
   const stats = BlogStatsResource.read();
@@ -128,7 +102,7 @@ export default function Home() {
             <StatCard
               icon={Calendar}
               title="本月更新"
-              value={stats.recent}
+              value={stats.monthly.length ? stats.monthly[0].count : 0}
               description={"近期活跃"}
             />
           </div>
@@ -138,9 +112,9 @@ export default function Home() {
         <Card hover={false}>
           <h2 className="bootom-line">近期博客分类</h2>
           <div className="flex flex-wrap gap-3">
-            {stats.recentTags.map((tag, index) => (
+            {stats.recentCategories.map((category, index) => (
               <span key={index} className="tag">
-                {tag.category}
+                {category}
               </span>
             ))}
           </div>

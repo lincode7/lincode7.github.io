@@ -1,10 +1,8 @@
-import matter from "gray-matter";
 import hljs from "highlight.js";
 import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 
 export default async function pharse(markdown: string) {
-  const { data, content } = matter(markdown);
   const html = await marked
     .use({
       async: true,
@@ -21,10 +19,7 @@ export default async function pharse(markdown: string) {
         },
       })
     )
-    .parse(content);
+    .parse(markdown);
 
-  return {
-    data,
-    html,
-  };
+  return html;
 }
