@@ -3,9 +3,6 @@
 /* Markdown 内容容器 */
 .markdown-body {
   @apply text-foreground leading-relaxed;
-
-  /* 响应式宽度 */
-  /* @apply max-w-none md:max-w-3xl mx-auto; */
 }
 
 /* 标题 */

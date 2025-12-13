@@ -82,18 +82,19 @@ export default function BlogPost() {
         type="article"
       />
 
-      <article className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* 返回按钮 */}
-        <button
-          onClick={() => navigate(`/blog/${tag}`)}
-          className="mb-6 flex-left gap-2 text-foreground/50 hover:text-primary transition-colors"
-        >
-          <ArrowLeft size={18} />
-          返回博客列表
-        </button>
-
+      <article className="container animate-slide-up">
         {/* 文章头部 */}
         <header className="mb-8">
+          {/* 返回按钮 */}
+          <button
+            onClick={() => navigate(`/blog/${tag}`)}
+            className="mb-6 flex-left gap-2 text-foreground/50 hover:text-primary transition-colors"
+          >
+            <ArrowLeft size={18} />
+            返回博客列表
+          </button>
+
+          {/* 头图 */}
           {post.coverImage && (
             <img
               src={post.coverImage}
@@ -103,25 +104,26 @@ export default function BlogPost() {
             />
           )}
 
-          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
-            <span className="flex items-center gap-1">
+          {/* 文章统计信息 */}
+          <div className="flex-left gap-4 text-sm text-foreground/50 mb-4">
+            <span className="flex-left gap-1">
               <Calendar size={14} />
               {formatDate(post.date)}
             </span>
             {post.readTime && (
-              <span className="flex items-center gap-1">
+              <span className="flex-left gap-1">
                 <Clock size={14} />
                 {post.readTime} 分钟阅读
               </span>
             )}
-            <span className="flex items-center gap-1">
+            <span className="flex-left gap-1">
               <Eye size={14} />
               {views} 次阅读
             </span>
           </div>
 
+          {/* 文章信息 */}
           <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-
           <div className="flex flex-wrap items-center gap-2 mb-6">
             <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
               {post.category}
@@ -129,7 +131,7 @@ export default function BlogPost() {
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 px-3 py-1 bg-secondary/20 text-secondary-foreground rounded-full text-sm"
+                className="flex-left gap-1 px-3 py-1 bg-secondary/20 text-secondary-foreground rounded-full text-sm"
               >
                 <Tag size={12} />
                 {tag}
@@ -149,17 +151,17 @@ export default function BlogPost() {
         {/* 文章尾部 */}
         <footer className="mt-12 pt-8 border-t">
           <div className="flex flex-wrap justify-between items-center gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex-left gap-4">
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
+                className="flex-left gap-2 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
                 aria-label="分享文章"
               >
                 <Share2 size={18} />
                 分享
               </button>
               <button
-                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
+                className="flex-left gap-2 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
                 aria-label="收藏文章"
               >
                 <Bookmark size={18} />

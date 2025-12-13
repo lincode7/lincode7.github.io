@@ -5,16 +5,16 @@ export const SITE_CONFIG = {
   name: "Xuanlin's Blog",
   description: "记录想法，分享生活，探索技术的无限可能。",
   author: {
-    name: "z",
+    name: "胡煊林",
     avatar: avatar,
-    label: "全栈开发者 | 技术爱好者 | 旅行达人",
-    location: "上海",
+    label: ["全栈开发", "数据分析", "旅行达人"],
+    location: "云南-昆明",
     contacts: {
-      github: "yourusername",
+      github: "lincode7",
       email: "example@email.com",
-      phone: "123314",
-      qq: "123123",
-      wechat: "xxsd",
+      phone: "15587025323",
+      qq: "1292017430",
+      wechat: "xlin_wt",
     },
   },
 };

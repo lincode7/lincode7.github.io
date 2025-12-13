@@ -6,6 +6,7 @@ import {
   MapPin,
   MessageCircleMore,
   PhoneCall,
+  Tag,
 } from "lucide-react";
 import MetaTags from "../components/seo/MetaTags";
 import { Card } from "../components/ui/Card";
@@ -37,12 +38,15 @@ export default function Home() {
               alt="个人头像"
               className="avatar"
             />
-            <div className="flex flex-col">
-              <h1 className="text-center md:text-left">
-                {SITE_CONFIG.author.name}
-              </h1>
-              <p className="mb-4">{SITE_CONFIG.author.label}</p>
-              <div className="flex-left gap-2">
+            <div className="flex flex-col gap-2 text-center md:text-left">
+              <h1>{SITE_CONFIG.author.name}</h1>
+              <div className="flex-left gap-2 text-foreground/50">
+                <Tag size={20}></Tag>
+                {SITE_CONFIG.author.label.map((label) => (
+                  <p>{label}</p>
+                ))}
+              </div>
+              <div className="flex-left  gap-2 text-foreground/50">
                 <MapPin size={20} />
                 <span>{SITE_CONFIG.author.location}</span>
               </div>

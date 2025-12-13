@@ -111,7 +111,7 @@ export default function BlogListPage() {
         description={`浏览${tagParam}标签下的技术文章和心得分享`}
       />
 
-      <div className="container mx-auto px-4 py-8 animate-slide-up">
+      <div className="container animate-slide-up">
         {/* 返回按钮和标题 */}
         <div className="mb-8 border-b pb-4">
           <Link
@@ -123,9 +123,7 @@ export default function BlogListPage() {
           </Link>
 
           <div className="flex-left gap-4">
-            <h1 className="text-3xl font-bold">
-              {tagParam ? `# ${tagParam}` : "所有文章"}
-            </h1>
+            <h1>{tagParam ? `# ${tagParam}` : "所有文章"}</h1>
             {tagParam && currentTagInfo && (
               <p className="text-gray-600 dark:text-gray-400 mt-2">
                 共有 {currentTagInfo.count} 篇相关文章

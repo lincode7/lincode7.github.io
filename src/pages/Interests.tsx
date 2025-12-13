@@ -22,7 +22,7 @@ export default function Interests() {
     <>
       <MetaTags title="Footmarks" description="记录生活足迹" />
 
-      <div className="container mx-auto px-4 py-8 animate-slide-up">
+      <div className="container animate-slide-up">
         {/* 近期活动 */}
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {recentActivities.map((activity, index) => (

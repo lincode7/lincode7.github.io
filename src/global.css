@@ -144,6 +144,14 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+  h1 {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-xl md:text-2xl font-bold;
+  }
+
   .hljs {
     @apply shadow-md rounded-lg;
   }
@@ -218,27 +226,31 @@
 
 /* 4. 组件层：可复用的样式类 */
 @layer components {
+  .container {
+    @apply mx-auto p-4 sm:p-6 md:p-8 lg:p-12;
+  }
+
   .avatar {
-    @apply rounded-full w-32 h-32 object-cover border-4 border-white  shadow-lg;
+    @apply rounded-full w-32 h-32 object-cover border-4 border-white shadow-lg;
     @apply transition-transform duration-300 ease-in-out hover:scale-105;
     @apply animate-float;
   }
 
   .bootom-line {
     @apply mb-4 relative;
-    @apply after:absolute after:left-0 after:-bottom-1 after:h-[3px] after:w-[60px] after:rounded-xs after:bg-linear-90 after:from-primary after:to-secondary;
+
+    &::after {
+      content: "";
+      @apply absolute left-0 -bottom-1 h-[3px] w-[60px] rounded-xs bg-linear-90 from-primary/50 to-secondary;
+    }
   }
 
   .tag {
     @apply relative px-4 py-2 bg-border rounded-full text-sm font-bold transition-transform duration-200 ease-in-out cursor-pointer overflow-hidden;
-  }
 
-  .tag:hover {
-    @apply bg-primary text-white -translate-y-0.5 shadow-lg;
-  }
-
-  .container {
-    @apply mx-auto p-4 sm:p-6 md:p-8 lg:p-12;
+    &:hover {
+      @apply bg-primary text-white -translate-y-0.5 shadow-lg;
+    }
   }
 
   .card {

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Home, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import MetaTags from "../components/seo/MetaTags";
+import { SITE_CONFIG } from "../utils/constants";
 
 export default function NotFound() {
   return (
@@ -11,7 +12,7 @@ export default function NotFound() {
         description="抱歉，您访问的页面不存在或已被移除"
       />
 
-      <div className="container mx-auto px-4 py-16 text-center">
+      <div className="container text-center">
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -68,7 +69,7 @@ export default function NotFound() {
             <p className="text-sm text-gray-500 dark:text-gray-400">
               如果问题持续存在，请通过
               <a
-                href="mailto:example@email.com"
+                href={`mailto:${SITE_CONFIG.author.contacts.email}`}
                 className="text-primary hover:underline ml-1"
               >
                 联系我
