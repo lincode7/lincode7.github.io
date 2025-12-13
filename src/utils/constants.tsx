@@ -3,7 +3,7 @@ import { BookOpen, Gamepad2, Github, Home } from "lucide-react";
 
 export const SITE_CONFIG = {
   name: "Xuanlin's Blog",
-  description: "分记录想法，分享生活，探索技术的无限可能。",
+  description: "记录想法，分享生活，探索技术的无限可能。",
   author: {
     name: "z",
     avatar: avatar,

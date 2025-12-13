@@ -1651,13 +1651,6 @@ at-least-node@^1.0.0:
   resolved "https://registry.npmjs.org/at-least-node/-/at-least-node-1.0.0.tgz"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-attributes-parser@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.npmjs.org/attributes-parser/-/attributes-parser-2.2.3.tgz"
-  integrity sha512-zjOUWt95la8AdUO+kP1GBOonWrV5jy9NjJP+z9tva/DSA6FIzGKcN/gk3tdqQf/pOeB8dkyd3FCPrjhELMmrkg==
-  dependencies:
-    json-loose "^1.2.4"
-
 available-typed-arrays@^1.0.7:
   version "1.0.7"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.7.tgz"
@@ -1815,6 +1808,11 @@ commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
+
+commander@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/commander/-/commander-8.3.0.tgz"
+  integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
 
 commander@7:
   version "7.2.0"
@@ -3236,13 +3234,6 @@ json-buffer@3.0.1:
   resolved "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz"
   integrity sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
 
-json-loose@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.npmjs.org/json-loose/-/json-loose-1.2.4.tgz"
-  integrity sha512-lwMWNC5pvVI33rhYWmAsmtICWE2IH7euDY/iIPeMFE5AuzAifYgqQrjqSMzwbrFV6MWPs41XD+CajElHI4cZMQ==
-  dependencies:
-    moo "^0.5.2"
-
 json-schema-traverse@^0.4.1:
   version "0.4.1"
   resolved "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz"
@@ -3281,6 +3272,13 @@ jsonpointer@^5.0.0:
   version "5.0.1"
   resolved "https://registry.npmjs.org/jsonpointer/-/jsonpointer-5.0.1.tgz"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
+
+katex@^0.16.27:
+  version "0.16.27"
+  resolved "https://registry.npmjs.org/katex/-/katex-0.16.27.tgz"
+  integrity sha512-aeQoDkuRWSqQN6nSvVCEFvfXdqo1OQiCmmW1kc9xSdjutPv7BGO7pqY9sQRJpMOGrEdfDgF2TfRXe5eUAD2Waw==
+  dependencies:
+    commander "^8.3.0"
 
 keyv@^4.5.4:
   version "4.5.4"
@@ -3415,17 +3413,20 @@ make-dir@^3.0.2:
   dependencies:
     semver "^6.0.0"
 
-marked-code-preview@^1.3.7:
-  version "1.3.7"
-  resolved "https://registry.npmjs.org/marked-code-preview/-/marked-code-preview-1.3.7.tgz"
-  integrity sha512-2XvsOKwunF0gWnAC2S4LijxhuKtfb8TpCuAboMs/6W+4lpkI7LgFQjcivUsActxMQbLuaaxOGIp8XkJJF3QmTQ==
-  dependencies:
-    attributes-parser "^2.2.3"
+marked-extended-tables@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/marked-extended-tables/-/marked-extended-tables-2.0.1.tgz"
+  integrity sha512-DV4Si978ZdaFbycIxzG4TdaNMtC0J8QfIKj1UOCejgJHwVjVJse8DNdJriWDeo/n74DWVYpRC6S56AdgWDPrPA==
 
 marked-highlight@^2.2.3:
   version "2.2.3"
   resolved "https://registry.npmjs.org/marked-highlight/-/marked-highlight-2.2.3.tgz"
   integrity sha512-FCfZRxW/msZAiasCML4isYpxyQWKEEx44vOgdn5Kloae+Qc3q4XR7WjpKKf8oMLk7JP9ZCRd2vhtclJFdwxlWQ==
+
+marked-katex-extension@^5.1.6:
+  version "5.1.6"
+  resolved "https://registry.npmjs.org/marked-katex-extension/-/marked-katex-extension-5.1.6.tgz"
+  integrity sha512-vYpLXwmlIDKILIhJtiRTgdyZRn5sEYdFBuTmbpjD7lbCIzg0/DWyK3HXIntN3Tp8zV6hvOUgpZNLWRCgWVc24A==
 
 marked@*, marked@^17.0.1:
   version "17.0.1"
@@ -3482,11 +3483,6 @@ minipass@^7.1.2:
   version "7.1.2"
   resolved "https://registry.npmjs.org/minipass/-/minipass-7.1.2.tgz"
   integrity sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
-
-moo@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.npmjs.org/moo/-/moo-0.5.2.tgz"
-  integrity sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==
 
 motion-dom@^12.23.23:
   version "12.23.23"

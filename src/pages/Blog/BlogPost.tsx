@@ -139,10 +139,10 @@ export default function BlogPost() {
         </header>
 
         {/* 文章内容 */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="max-w-none">
           <div
             dangerouslySetInnerHTML={{ __html: post.content }}
-            className="blog-content"
+            className="markdown-body"
           />
         </div>
 

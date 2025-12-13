@@ -14,17 +14,20 @@ export default function Footer() {
               <Code size={24} className="animate-float text-primary" />
               <span className="text-xl font-bold">{SITE_CONFIG.name}</span>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-foreground/50">
               {SITE_CONFIG.description}
             </p>
           </div>
 
           {/* 技术栈 */}
           <div>
-            <h3>技术栈</h3>
+            <h3 className="p-0 m-0 mb-4">技术栈</h3>
             <div className="flex flex-wrap gap-2">
               {TECH_STACK.map((tech) => (
-                <span key={tech} className="tag text-xs">
+                <span
+                  key={tech}
+                  className="tag text-xs text-foreground/50 bg-muted"
+                >
                   {tech}
                 </span>
               ))}
@@ -33,8 +36,8 @@ export default function Footer() {
 
           {/* 联系信息 */}
           <div>
-            <h3>关注我</h3>
-            <div className="flex-left flex-wrap gap-4">
+            <h3 className="p-0 m-0 mb-4">关注我</h3>
+            <div className="flex flex-wrap gap-2">
               {SOCIAL_LINKS.map((link, index) => (
                 <a
                   key={index}
@@ -51,7 +54,7 @@ export default function Footer() {
 
           {/* 其他链接 */}
           <div>
-            <h3>快捷链接</h3>
+            <h3 className="p-0 m-0 mb-4">快捷链接</h3>
             <div className="space-y-2">
               <a
                 href="https://github.com/sponsors"
@@ -87,11 +90,9 @@ export default function Footer() {
         {/* 版权信息 */}
         <div className="mt-8 pt-8">
           <p className="flex-center gap-1 text-sm">
-            © {currentYear} {SITE_CONFIG.name}
-            <Heart size={14} className="text-red-500" />
-            &
+            © {currentYear} {SITE_CONFIG.name} |{" "}
+            <Heart size={14} className="text-red-500" /> &{" "}
             <Coffee size={14} className="text-[#b36d1e]" />
-            Made with Vite + React + TypeScript + Tailwindcss
           </p>
         </div>
       </div>

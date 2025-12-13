@@ -1,0 +1,143 @@
+/* gfm-tailwind.css */
+
+/* Markdown 内容容器 */
+.markdown-body {
+  @apply text-foreground leading-relaxed;
+
+  /* 响应式宽度 */
+  /* @apply max-w-none md:max-w-3xl mx-auto; */
+}
+
+/* 标题 */
+.markdown-body h1 {
+  @apply text-4xl font-bold border-b pb-3 mb-6 mt-8 pt-8;
+}
+
+.markdown-body h2 {
+  @apply text-3xl font-semibold border-b pb-2 mb-5 mt-8 pt-8;
+}
+
+.markdown-body h3 {
+  @apply text-2xl font-semibold mb-4 mt-6;
+}
+
+.markdown-body h4 {
+  @apply text-xl font-semibold mb-3 mt-5;
+}
+
+.markdown-body h5 {
+  @apply text-lg font-medium mb-2 mt-4;
+}
+
+.markdown-body h6 {
+  @apply text-base font-medium text-muted-foreground mb-2 mt-4;
+}
+
+/* 段落 */
+.markdown-body p {
+  @apply mb-4 leading-relaxed;
+}
+
+/* 链接 */
+.markdown-body a {
+  @apply text-primary hover:text-primary/80 underline underline-offset-2;
+}
+
+/* 列表 */
+.markdown-body ul,
+.markdown-body ol {
+  @apply mb-4 pl-6 space-y-1;
+}
+
+.markdown-body ul {
+  @apply list-disc;
+}
+
+.markdown-body ol {
+  @apply list-decimal;
+}
+
+.markdown-body li {
+  @apply mb-1;
+}
+
+.markdown-body li > ul,
+.markdown-body li > ol {
+  @apply mt-1 mb-0;
+}
+
+/* 引用块 */
+.markdown-body blockquote {
+  @apply border-l-4 border-primary/30 pl-4 italic my-4 py-1 bg-muted/10;
+}
+
+.markdown-body blockquote p {
+  @apply mb-0;
+}
+
+/* 代码 */
+.markdown-body code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.markdown-body pre {
+  @apply bg-muted p-4 rounded-lg overflow-x-auto my-4;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-sm leading-relaxed;
+}
+
+/* 表格 */
+.markdown-body table {
+  @apply w-full border-collapse my-6;
+}
+
+.markdown-body table th {
+  @apply border border-border px-4 py-2 text-left font-semibold bg-muted/30;
+}
+
+.markdown-body table td {
+  @apply border border-border px-4 py-2;
+}
+
+.markdown-body table tr:nth-child(even) {
+  @apply bg-muted/5;
+}
+
+/* 任务列表 */
+.markdown-body .task-list-item {
+  @apply list-none pl-0;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  @apply mr-2 mt-1;
+}
+
+/* 分隔线 */
+.markdown-body hr {
+  @apply border-t border-border my-8;
+}
+
+/* 图片 */
+.markdown-body img {
+  @apply max-w-full h-auto rounded my-4;
+}
+
+/* 内联样式 */
+.markdown-body strong {
+  @apply font-bold;
+}
+
+.markdown-body em {
+  @apply italic;
+}
+
+.markdown-body del {
+  @apply line-through text-muted-foreground;
+}
+
+/* 脚注（如果支持） */
+.markdown-body .footnote-ref a {
+  @apply no-underline;
+}

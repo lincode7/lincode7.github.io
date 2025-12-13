@@ -80,6 +80,9 @@
 
 /* 3. 基础层：定义CSS自定义属性（CSS变量） */
 @layer base {
+  @import "katex/dist/katex.css";
+  @import "./gfm.css";
+
   /* 3.1 浅色主题变量 */
   :root {
     @import "highlight.js/styles/github.css";
@@ -141,24 +144,75 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  h1 {
-    @apply text-2xl md:text-3xl lg:text-4xl font-extrabold leading-[1.2] mb-0.5;
-  }
-
-  h2 {
-    @apply text-xl md:text-2xl font-bold mb-1.5;
-  }
-
-  h3 {
-    @apply text-lg md:text-xl font-semibold mb-4;
-  }
-
-  p {
-    @apply text-foreground/50 text-lg max-w-3xl;
-  }
-
   .hljs {
     @apply shadow-md rounded-lg;
+  }
+
+  table {
+    @apply w-full table-auto border-collapse rounded-lg shadow-sm overflow-hidden mt-4 mb-4;
+  }
+
+  th {
+    @apply border-b px-4 py-2 font-semibold text-foreground 
+         bg-linear-to-b from-muted/30 to-transparent
+         uppercase tracking-wide;
+
+    &:hover {
+      @apply bg-muted;
+    }
+
+    &:first-child {
+      @apply rounded-tl-lg pl-6;
+    }
+
+    &:last-child {
+      @apply rounded-tr-lg pr-6;
+    }
+  }
+
+  td {
+    @apply border-b p-4 pl-6 text-sm transition-colors duration-150;
+
+    &:hover {
+      @apply bg-muted;
+    }
+
+    &:first-child {
+      @apply pl-6;
+    }
+
+    &:last-child {
+      @apply pr-6;
+    }
+  }
+
+  tbody tr {
+    @apply transition-all duration-200;
+
+    /* 偶数行背景色 */
+    &:nth-child(even) {
+      @apply bg-muted/50;
+    }
+
+    /* 行悬停效果 */
+    &:hover {
+      @apply bg-muted/20 shadow-sm;
+    }
+
+    /* 最后一行特殊处理 */
+    &:last-child {
+      td {
+        @apply border-b-0;
+
+        &:first-child {
+          @apply rounded-bl-lg;
+        }
+
+        &:last-child {
+          @apply rounded-br-lg;
+        }
+      }
+    }
   }
 }
 
