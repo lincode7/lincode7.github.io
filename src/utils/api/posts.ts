@@ -102,7 +102,7 @@ async function loadPosts(): Promise<Post[]> {
 
   const all = filePaths.map(async (path) => {
     const fileContent = await posts[path]();
-    const { data, content } = matter(fileContent);
+    const { data, content } = matter(fileContent as string);
     return {
       ...data,
       id: path.match(/\/([^\/]+?)\.md$/)?.[1] || "",

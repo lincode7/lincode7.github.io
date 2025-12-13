@@ -1,8 +1,8 @@
 import hljs from "highlight.js";
 import { marked } from "marked";
-import extendedTables from "marked-extended-tables";
 import { markedHighlight } from "marked-highlight";
 import markedKatex from "marked-katex-extension";
+const extendedTables = require("marked-extended-tables");
 
 const myMarked = marked
   .use({
