@@ -5,7 +5,7 @@
   "date": "2024-12-15",
   "artist": "Olivia Rodrigo",
   "album": "GUTS",
-  "genre": ["流行", "另类摇滚"],
+  "tags": ["流行", "另类摇滚"],
   "releaseYear": 2023,
   "favoriteTracks": ["bad idea right?", "get him back!", "vampire"],
   "listenedCount": 42,

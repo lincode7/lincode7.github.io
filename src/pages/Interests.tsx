@@ -3,12 +3,10 @@ import InterestCard from "../components/ui/InterestCard";
 import { interestsAPI } from "../utils/api/interests";
 import { createSuspenseResource } from "../utils/suspense";
 
-const recentActivitiesResource = createSuspenseResource(
-  interestsAPI.getRecentInterests
-);
+const interestsResource = createSuspenseResource(interestsAPI.getList);
 
 export default function Interests() {
-  const recentActivities = recentActivitiesResource.read();
+  const interests = interestsResource.read();
 
   return (
     <>
@@ -17,7 +15,7 @@ export default function Interests() {
       <div className="page">
         {/* 近期活动 */}
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
-          {recentActivities.map((activity, index) => (
+          {interests.map((activity, index) => (
             <InterestCard key={index} data={activity} />
           ))}
         </div>

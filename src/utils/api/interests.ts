@@ -28,7 +28,7 @@ export const interestsAPI = {
   },
 
   // 按类型获取兴趣项目
-  async getByType(type: string, page = 1, limit = 10): Promise<Interest[]> {
+  async getList(page = 1, limit = 10, type?: string): Promise<Interest[]> {
     const { data, index } = await generateInterestRepo();
     const { byType } = index;
 
@@ -36,7 +36,11 @@ export const interestsAPI = {
     const start = (page - 1) * limit;
     const end = start + limit;
 
-    return byType[type].slice(start, end).map((i) => data[i]);
+    if (type) {
+      return byType[type].slice(start, end).map((i) => data[i]);
+    }
+
+    return data.slice(start, end);
   },
 };
 
@@ -57,15 +61,25 @@ async function loadInterests(): Promise<Interest[]> {
 
     const [_, type, id] = match;
     const fileContent = await interests[path]();
+    const items = JSON.parse(fileContent as string);
+
+    if (Array.isArray(items)) {
+      return items.map((item, index) => {
+        return {
+          id: `id_${index}`,
+          type,
+          ...item,
+        };
+      });
+    }
 
     return {
       id,
       type,
-      ...JSON.parse(fileContent as string),
+      ...items,
     } as Interest;
   });
-
-  const result = await Promise.all(all);
+  const result = (await Promise.all(all)).flat();
 
   return result
     .filter((i) => i != null)
