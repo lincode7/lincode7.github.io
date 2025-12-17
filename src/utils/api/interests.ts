@@ -18,7 +18,7 @@ export const interestsAPI = {
   },
 
   // 获取近期活动
-  async getRecentActivities(): Promise<Interest[]> {
+  async getRecentInterests(): Promise<Interest[]> {
     const { data } = await generateInterestRepo();
 
     const recentDate = new Date(data[0].date);

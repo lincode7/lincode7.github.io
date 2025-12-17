@@ -1,7 +1,7 @@
 import { InView } from "react-intersection-observer";
 import { cn } from "../../utils/helper";
 
-export default function FlipUP({
+export default function FlipDown({
   children,
   className,
 }: {

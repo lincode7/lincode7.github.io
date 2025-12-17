@@ -1,22 +1,14 @@
-import { Film, Gamepad, Music, Plane } from "lucide-react";
 import MetaTags from "../components/seo/MetaTags";
 import InterestCard from "../components/ui/InterestCard";
 import { interestsAPI } from "../utils/api/interests";
 import { createSuspenseResource } from "../utils/suspense";
 
 const recentActivitiesResource = createSuspenseResource(
-  interestsAPI.getRecentActivities
+  interestsAPI.getRecentInterests
 );
 
 export default function Interests() {
   const recentActivities = recentActivitiesResource.read();
-
-  const icon = {
-    game: Gamepad,
-    movie: Film,
-    music: Music,
-    travel: Plane,
-  };
 
   return (
     <>
@@ -26,11 +18,7 @@ export default function Interests() {
         {/* 近期活动 */}
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {recentActivities.map((activity, index) => (
-            <InterestCard
-              key={index}
-              icon={icon[activity.type as keyof typeof icon]}
-              data={activity}
-            />
+            <InterestCard key={index} data={activity} />
           ))}
         </div>
       </div>

@@ -8,11 +8,14 @@ import {
   Tag,
   Venus,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import FlipUP from "../components/animation/FlipUP";
+import FlipDown from "../components/animation/FlipUP";
 import SlideUP from "../components/animation/SlideUP";
+import Section1 from "../components/layout/Section1";
 import MetaTags from "../components/seo/MetaTags";
+import InterestCard from "../components/ui/InterestCard";
+import { interestsAPI } from "../utils/api/interests";
 import { blogAPI } from "../utils/api/posts";
 import { SITE_CONFIG } from "../utils/constants";
 import { cn } from "../utils/helper";
@@ -20,9 +23,7 @@ import { createSuspenseResource } from "../utils/suspense";
 
 function Profile({ className }: { className?: string }) {
   return (
-    <div
-      className={cn("mb-6 border-t-2 border-foreground/40 pt-12", className)}
-    >
+    <div className={cn("mb-6 pt-12", className)}>
       <div className="grid gap-[5px] grid-cols-[1fr_auto] lg:gap-y-0 lg:gap-x-[15px]">
         <img
           src={SITE_CONFIG.author.avatar}
@@ -30,7 +31,7 @@ function Profile({ className }: { className?: string }) {
           className="avatar col-span-2 lg:col-span-1 lg:row-span-2 md:justify-self-end lg:justify-self-start md:self-end lg:self-start"
         />
 
-        <span className="col-span-2 lg:col-span-1 lg:justify-self-end mb-2.5 mt-[15px] lg:m-0 text-sm">
+        <span className="col-span-2 lg:col-span-1 lg:justify-self-end mb-2.5 mt-[15px] lg:m-0 uppercase text-[10px]">
           Profile info
         </span>
 
@@ -110,25 +111,40 @@ function Profile({ className }: { className?: string }) {
 
 const categoriesResource = createSuspenseResource(blogAPI.getCategories);
 
-function GridCategores() {
+function GridCategores({
+  setHotTags,
+}: {
+  setHotTags: (tags: string[]) => void;
+}) {
   const categories = categoriesResource.read();
+  const bgColors = [
+    "bg-primary/50",
+    "bg-destructive/50",
+    "bg-primary/20",
+    "bg-destructive/20",
+  ];
 
   return (
     <div className={cn("lg:grid lg:grid-cols-4 gap-5 items-start")}>
-      <div className="hidden lg:flex justify-end items-end">
-        <p className="block">some infor about category</p>
+      <div className="hidden lg:flex ">
+        <p className="block uppercase text-[10px]">category stats</p>
       </div>
+
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-5 lg:gap-y-[60px] col-span-3">
-        {categories.map((category) => (
-          <FlipUP className="cursor-pointer">
-            <div className="aspect-square rounded-md bg-foreground/40 hover:opacity-50 duration-500 flex-center flex-col">
+        {categories.map((category, index) => (
+          <FlipDown className="cursor-pointer">
+            <div
+              className={cn(
+                "aspect-square rounded-md hover:opacity-50 duration-500 flex-center flex-col",
+                `${bgColors[index % bgColors.length]}`
+              )}
+              onMouseOver={() => setHotTags(category.hotTags)}
+            >
               <p className="text-7xl lg:text-9xl font-bold">{category.count}</p>
               <p className="text-4xl">{category.name}</p>
             </div>
-            <p className="pointer-events-none overflow-hidden">
-              {category.hotTags}
-            </p>
-          </FlipUP>
+            <p className="pointer-events-none overflow-hidden">posts count</p>
+          </FlipDown>
         ))}
       </div>
     </div>
@@ -137,7 +153,7 @@ function GridCategores() {
 
 const tagsResource = createSuspenseResource(blogAPI.getTags);
 
-function FixedTags({}) {
+function FixedTags({ hotTags }: { hotTags: string[] }) {
   const tags = tagsResource.read();
 
   return (
@@ -149,11 +165,16 @@ function FixedTags({}) {
         "fixed top-0 lg:top-auto lg:bottom-0 left-0",
         "w-full max-w-full px-5 lg:px-0 py-[25px] mx-auto justify-center flex flex-wrap gap-2.5 lg:gap-5 xl:gap-[35px] md:gap-y-[15px] ",
         "bg-background"
-        // "hidden"
       )}
     >
       {tags.map((tag) => (
-        <li>{tag.name}</li>
+        <li
+          className={cn(
+            hotTags.findIndex((name) => name === tag.name) == -1 && "opacity-10"
+          )}
+        >
+          {tag.name}
+        </li>
       ))}
     </ul>
   );
@@ -163,11 +184,12 @@ function CategoresAndTags({ className }: { className?: string }) {
   const { ref, inView } = useInView({
     rootMargin: "-200px",
   });
+  const [hotTags, setHotTags] = useState<string[]>([]);
 
   return (
     <div ref={ref} className={cn("relative", className)}>
-      <GridCategores />
-      {inView && <FixedTags />}
+      <GridCategores setHotTags={setHotTags} />
+      {inView && <FixedTags hotTags={hotTags} />}
     </div>
   );
 }
@@ -175,30 +197,14 @@ function CategoresAndTags({ className }: { className?: string }) {
 const recentPostsResource = createSuspenseResource(blogAPI.getPosts);
 
 function RecentPosts({ className }: { className?: string }) {
-  const { posts: recentPosts } = recentPostsResource.read(1, 3);
+  const { posts: recentPosts } = recentPostsResource.read(1, 5);
 
   return (
-    <div className={cn(className)}>
-      <div className="relative grid md:grid-cols-[1fr_auto_auto_1fr] gap-x-[15px] gap-y-[5px] uppercase">
-        {/* 绝对位置标签 */}
-        <span className="hidden md:block absolute right-0 text-[10px]">
-          blog service
-        </span>
-        {/* 网格内容 */}
-        <SlideUP className="md:col-span-2">
-          <h2 className="overflow-hidden text-4xl md:text-7xl">blogs</h2>
-        </SlideUP>
-
-        <SlideUP className="md:col-start-2 md:col-end-4 justify-self-center">
-          <h2 className="overflow-hidden text-4xl md:text-7xl">notes</h2>
-        </SlideUP>
-
-        <SlideUP className="md:col-start-3 md:col-end-5 justify-self-end">
-          <h2 className="overflow-hidden text-4xl md:text-7xl">photos</h2>
-        </SlideUP>
-      </div>
-
-      {/* 近期博客，3篇 */}
+    <Section1
+      title={"recent posts"}
+      labels={["blogs", "notes", "photos"]}
+      className={cn(className)}
+    >
       <div className="cardsOffre mt-12 lg:mt-30 perspective-[1000px] space-y-10">
         {...recentPosts.map((post, index) => (
           <div
@@ -253,7 +259,33 @@ function RecentPosts({ className }: { className?: string }) {
           </div>
         ))}
       </div>
-    </div>
+    </Section1>
+  );
+}
+
+const recentInterestsResource = createSuspenseResource(
+  interestsAPI.getRecentInterests
+);
+
+function RecentInterests({ className }: { className?: string }) {
+  const recentInterests = recentInterestsResource.read();
+
+  return (
+    <Section1
+      title={"recent interests"}
+      labels={["games", "movies", "music", "trips"]}
+      start={"right"}
+      className={cn(className)}
+    >
+      <ul className="flex flex-row gap-3 overflow-x-auto overflow-y-visible scroll-smooth md:[&::-webkit-scrollbar]:hidden">
+        {...recentInterests.map((interest) => (
+          <InterestCard
+            className="min-w-full md:min-w-1/3 aspect-auto"
+            data={interest}
+          />
+        ))}
+      </ul>
+    </Section1>
   );
 }
 
@@ -286,11 +318,11 @@ export default function Home() {
 
         <Profile className="mt-25 md:mt-50" />
 
-        <CategoresAndTags className="pt-7 lg:pt-px pb-6 px-5 md:px-12 mt-10 lg:mt-30" />
+        <CategoresAndTags className="pt-7 lg:pt-px pb-6 mt-10 lg:mt-30" />
 
-        <RecentPosts className="px-5 md:px-12 pt-10 lg:pt-0 lg:mt-[270px]" />
+        <RecentPosts className="pt-10 lg:pt-0 lg:mt-[270px]" />
 
-        <div className="h-200" />
+        <RecentInterests className="pt-7 lg:pt-px pb-6 mt-10 lg:mt-30" />
       </div>
     </>
   );

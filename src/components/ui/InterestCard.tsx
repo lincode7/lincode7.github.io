@@ -1,4 +1,4 @@
-import { Calendar } from "lucide-react";
+import { Calendar, Film, Gamepad, Music, Plane } from "lucide-react";
 import type {
   GameInterest,
   Interest,
@@ -16,16 +16,19 @@ import {
 } from "./Card";
 
 interface InterestCardProps {
-  icon: any;
   data: Interest;
   className?: string;
 }
 
-export default function InterestCard({
-  icon: Icon,
-  data,
-  className,
-}: InterestCardProps) {
+export default function InterestCard({ data, className }: InterestCardProps) {
+  const icon = {
+    game: Gamepad,
+    movie: Film,
+    music: Music,
+    travel: Plane,
+  };
+  const Icon = icon[data.type as keyof typeof icon];
+
   return (
     <Card
       className={`overflow-hidden break-inside-avoidmb-6 flex flex-col mb-4 gap-1.5 hover-scaled hover:p-2 ${className}`}
