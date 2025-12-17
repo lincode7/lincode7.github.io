@@ -330,8 +330,6 @@ export default function Home() {
     window.scroll(0, 0);
   }, []);
 
-  let n = 0;
-
   return (
     <>
       <MetaTags
