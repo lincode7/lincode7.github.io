@@ -9,7 +9,7 @@ import {
   Venus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import { InView, useInView } from "react-intersection-observer";
 import FlipDown from "../components/animation/FlipUP";
 import SlideUP from "../components/animation/SlideUP";
 import Section1 from "../components/layout/Section1";
@@ -38,6 +38,7 @@ function Profile({ className }: { className?: string }) {
         {/* TODO: 滚动显示: 位置y：20-0 */}
         {SITE_CONFIG.author.label.map((label, index) => (
           <SlideUP
+            key={index}
             className={cn(
               index == 0
                 ? "lg:justify-self-end lg:self-end"
@@ -86,7 +87,7 @@ function Profile({ className }: { className?: string }) {
         <ul className="logosPodcast flex gap-[15px] lg:gap-5">
           {Object.entries(SITE_CONFIG.author.contacts).map(([key, value]) => {
             return (
-              <li className="w-[17px] lg:w-7 grid place-items-center">
+              <li key={key} className="w-[17px] lg:w-7 grid place-items-center">
                 {key === "github" && (
                   <a key={key} href={`https://github.com/${value}`}>
                     <Github />
@@ -132,7 +133,7 @@ function GridCategores({
 
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-5 lg:gap-y-[60px] col-span-3">
         {categories.map((category, index) => (
-          <FlipDown className="cursor-pointer">
+          <FlipDown key={index} className="cursor-pointer">
             <div
               className={cn(
                 "aspect-square rounded-md hover:opacity-50 duration-500 flex-center flex-col",
@@ -198,6 +199,7 @@ const recentPostsResource = createSuspenseResource(blogAPI.getPosts);
 
 function RecentPosts({ className }: { className?: string }) {
   const { posts: recentPosts } = recentPostsResource.read(1, 5);
+  const num = recentPosts.length;
 
   return (
     <Section1
@@ -205,60 +207,94 @@ function RecentPosts({ className }: { className?: string }) {
       labels={["blogs", "notes", "photos"]}
       className={cn(className)}
     >
-      <div className="cardsOffre mt-12 lg:mt-30 perspective-[1000px] space-y-10">
-        {...recentPosts.map((post, index) => (
-          <div
-            className={cn(
-              "lg:sticky lg:top-15 last:relative last:top-0 mb-10 lg:mb-10 lg:last:mb-0",
-              "lg:min-h-[545px] px-6 lg:px-20 py-6 lg:py-12 my-5 lg:my-0 rounded-[10px]",
-              "grid auto-rows-max-remove grid-rows-[auto_1fr] md:grid-cols-2 xl:grid-cols-[60%_auto]",
-              "group origin-top",
-              "bg-foreground",
-              "duration-500 transition-discrete",
-              "text-background"
-            )}
-          >
-            <a
-              href={`/blog/${post.tags[0]}/${post.id}`}
-              className="lg:col-span-2 lg:-order-1 lg:pb-5 lg:border-b-2 lg:border-background/30 uppercase text-2xl md:text-4xl cursor-pointer hover:text-primary"
+      <InView
+        threshold={Array.from({ length: 101 }, (_, i) => i * 0.01)}
+        // 扩展下边界，组件从下方出现前，提前渲染，向上移动到屏幕边界时，触发消失动画
+        rootMargin="0px 0px 1000% 0px"
+      >
+        {({ ref, entry }) => {
+          const ratio = entry?.intersectionRatio ?? 0;
+          return (
+            <div
+              ref={ref}
+              className={cn("mt-12 lg:mt-30 space-y-10 perspective-[1000px]")}
             >
-              {post.title}
-            </a>
-            <span
-              className={cn(
-                "block text-7xl lg:text-[300px] tracking-[-0.02em] leading-none lg:leading-[0.75] self-center lg:self-end justify-self-end lg:justify-self-start opacity-10"
-              )}
-            >
-              {index + 1}
-            </span>
-            <div className="pt-[5px] lg:max-w-[380px] col-span-2 lg:self-end lg:col-span-1 mt-5 border-t border-background/30 lg:border-none space-y-3">
-              <img
-                src={post.coverImage}
-                alt={post.title}
-                className="w-full aspect-4/2 object-cover rounded-lg"
-                loading="lazy"
-              />
-              <p className="flex-left flex-row gap-1.5 font-semibold text-background/50">
-                <p className="rounded-xl bg-primary/50 px-3 py-1 w-fit">
-                  {post.category}
-                </p>
-                {post.date}
-              </p>
+              {...recentPosts.map((post, index) => {
+                // 可见比例平均映射到每一个子组件
+                // index==0, ratio:[1,0.8]->scaledRatio:[1,0]
+                const l = 1 - index / num;
+                const r = 1 - (index + 1) / num;
+                const scaledRatio = Math.min(
+                  (ratio > l ? index / num : ratio < r ? 0 : ratio - r) * num,
+                  1
+                );
+                // 子组件动画进度更新
+                const opacity = scaledRatio;
+                const rotateX = Math.floor(-90 * (1 - scaledRatio)); // 向屏幕内旋转90°
+                const translateZ =
+                  scaledRatio < 0.5 ? Math.floor(100 * (1 - scaledRatio)) : 0; // 旋转45°后，像屏幕内移动100px
 
-              <p className="flex-left flex-wrap gap-1.5 text-background/70">
-                {...post.tags.map((tag) => (
-                  <span className="flex-left flex-row gap-0.5 text-sm">
-                    <Tag size={12}></Tag>
-                    {tag}
-                  </span>
-                ))}
-              </p>
+                return (
+                  <div
+                    className={cn(
+                      "lg:sticky lg:top-15 last:relative last:top-0 mb-10 lg:mb-10 lg:last:mb-0",
+                      "px-6 lg:px-20 py-6 lg:py-12 my-5 lg:my-0 rounded-[10px]",
+                      "grid auto-rows-max grid-rows-[auto_1fr] md:grid-cols-2 xl:grid-cols-[60%_auto]",
+                      "group origin-top",
+                      "bg-foreground",
+                      "duration-500 transition-discrete",
+                      "text-background"
+                    )}
+                    style={{
+                      opacity,
+                      transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
+                    }}
+                  >
+                    <a
+                      href={`/blog/${post.tags[0]}/${post.id}`}
+                      className="lg:col-span-2 lg:-order-1 lg:pb-5 lg:border-b-2 lg:border-background/30 uppercase text-2xl md:text-4xl cursor-pointer hover:text-primary"
+                    >
+                      {post.title}
+                    </a>
+                    <span
+                      className={cn(
+                        "block text-7xl lg:text-[300px] tracking-[-0.02em] leading-none lg:leading-[0.75] self-center lg:self-end justify-self-end lg:justify-self-start opacity-10"
+                      )}
+                    >
+                      {index + 1}
+                    </span>
+                    <div className="pt-[5px] lg:max-w-[380px] col-span-2 lg:self-end lg:col-span-1 mt-5 border-t border-background/30 lg:border-none space-y-3">
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="w-full aspect-4/2 object-cover rounded-lg"
+                        loading="lazy"
+                      />
+                      <p className="flex-left flex-row gap-1.5 font-semibold text-background/50">
+                        <span className="rounded-xl bg-primary/50 px-3 py-1 w-fit">
+                          {post.category}
+                        </span>
+                        {post.date}
+                      </p>
 
-              <p>{post.excerpt}</p>
+                      <p className="flex-left flex-wrap gap-1.5 text-background/70">
+                        {...post.tags.map((tag) => (
+                          <span className="flex-left flex-row gap-0.5 text-sm">
+                            <Tag size={12}></Tag>
+                            {tag}
+                          </span>
+                        ))}
+                      </p>
+
+                      <p>{post.excerpt}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        ))}
-      </div>
+          );
+        }}
+      </InView>
     </Section1>
   );
 }
@@ -293,6 +329,8 @@ export default function Home() {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
+
+  let n = 0;
 
   return (
     <>
