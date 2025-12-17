@@ -57,7 +57,7 @@ export default function BlogPost() {
 
   if (!id || !post) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center">
+      <div className="page mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4 text-foreground/50">
           文章不存在
         </h2>
@@ -82,7 +82,7 @@ export default function BlogPost() {
         type="article"
       />
 
-      <article className="container animate-slide-up">
+      <article className="page">
         {/* 文章头部 */}
         <header className="mb-8">
           {/* 返回按钮 */}

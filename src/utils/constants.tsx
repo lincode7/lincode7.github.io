@@ -3,15 +3,16 @@ import { BookOpen, Gamepad2, Github, Home } from "lucide-react";
 
 export const SITE_CONFIG = {
   name: "Xuanlin's Blog",
-  description: "记录想法，分享生活，探索技术的无限可能。",
+  description: "记录想法，分享生活，探索未来的无限可能",
   author: {
-    name: "胡煊林",
     avatar: avatar,
-    label: ["全栈开发", "数据分析", "旅行达人"],
+    name: "胡煊林",
+    gender: "male",
+    label: ["后端开发", "数据分析", "旅行达人", "游戏玩家"],
     location: "云南-昆明",
     contacts: {
       github: "lincode7",
-      email: "example@email.com",
+      email: "huxuanlin.c@qq.com",
       phone: "15587025323",
       qq: "1292017430",
       wechat: "xlin_wt",
@@ -33,10 +34,11 @@ export const SOCIAL_LINKS = [
 ];
 
 export const TECH_STACK = [
-  "React",
+  "Python",
   "Golang",
   "Redis",
   "MQ",
   "PostgreSQL",
   "Docker",
+  "React",
 ];

@@ -57,9 +57,11 @@ export const blogAPI = {
   // 获取分类统计
   async getCategories(): Promise<CategoryStats[]> {
     const { index } = await generateBlogRepo();
-    return Object.entries(index.byCategory).map(
-      ([name, orders]) => ({ name, count: orders.length } as CategoryStats)
-    );
+    return Object.entries(index.byCategory)
+      .map(([name, [orders, tags]]) => {
+        return { name, count: orders.length, hotTags: tags } as CategoryStats;
+      })
+      .sort((a, b) => b.count - a.count);
   },
 
   // 获取标签统计
@@ -138,8 +140,9 @@ async function generateBlogRepo(): Promise<BlogRepo> {
     data.forEach((post, order) => {
       index.byID[post.id] = order;
 
-      index.byCategory[post.category] ??= [];
-      index.byCategory[post.category].push(order);
+      index.byCategory[post.category] ??= [[], []];
+      index.byCategory[post.category][0].push(order);
+      index.byCategory[post.category][1].push(...post.tags);
 
       post.tags.forEach((tag) => {
         index.byTag[tag] ??= [];
@@ -151,6 +154,22 @@ async function generateBlogRepo(): Promise<BlogRepo> {
       index.byMonth[yyyyMM].push(order);
 
       isRecent(new Date(post.date), recentDate) && index.recent.push(order);
+    });
+
+    Object.keys(index.byCategory).forEach((key) => {
+      // tags去重并按出现次数排序
+      const tags = index.byCategory[key][1];
+
+      const count: Record<string, number> = {};
+
+      tags.forEach((tag) => {
+        count[tag] ??= 0;
+        count[tag]++;
+      });
+
+      index.byCategory[key][1] = Array.from(
+        Object.keys(count).sort((a, b) => count[b] - count[a])
+      );
     });
 
     return {

@@ -118,7 +118,7 @@
 
 /* 图片 */
 .markdown-body img {
-  @apply max-w-full h-auto rounded my-4;
+  @apply max-w-full h-auto rounded my-4 hover:shadow-sm;
 }
 
 /* 内联样式 */

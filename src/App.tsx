@@ -1,17 +1,12 @@
+import { Buffer } from "buffer";
 import { Suspense, lazy, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HelmetProvider } from "react-helmet-async";
-import {
-  Route,
-  BrowserRouter as Router,
-  Routes,
-  useLocation,
-} from "react-router-dom";
-import Layout from "./components/layout";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Footer from "./components/layout/Footer";
+import Header from "./components/layout/Header";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { Buffer } from "buffer";
-
 // @ts-ignore
 window.Buffer = Buffer;
 
@@ -22,17 +17,6 @@ const BlogList = lazy(() => import("./pages/Blog/BlogList"));
 const BlogPost = lazy(() => import("./pages/Blog/BlogPost"));
 const Interests = lazy(() => import("./pages/Interests"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
-// 滚动到顶部组件
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
 
 // 初始化PWA
 function initializePWA() {
@@ -55,29 +39,18 @@ function AppInitializer() {
   useEffect(() => {
     // 初始化PWA
     initializePWA();
-
-    // 添加回到顶部按钮逻辑
-    const backToTopButton = document.getElementById("back-to-top");
-
-    const handleScroll = () => {
-      if (!backToTopButton) return;
-
-      if (window.scrollY > 300) {
-        backToTopButton.style.opacity = "1";
-        backToTopButton.style.visibility = "visible";
-      } else {
-        backToTopButton.style.opacity = "0";
-        backToTopButton.style.visibility = "hidden";
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // 清理函数
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return null;
+}
+
+// 错误信息
+function ErrorMessage() {
+  return (
+    <div className="page h-screen flex-center">
+      <p className="text-4xl">⚠️Something went wrong</p>
+    </div>
+  );
 }
 
 function App() {
@@ -86,27 +59,20 @@ function App() {
       <ThemeProvider>
         <Router basename={import.meta.env.BASE_URL}>
           <AppInitializer />
-          <ScrollToTop />
-          <Layout>
-            <ErrorBoundary
-              fallback={
-                <div className="flex-center">
-                  <p>⚠️Something went wrong</p>
-                </div>
-              }
-            >
-              <Suspense fallback={<LoadingSpinner />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/blog" element={<BlogHome />} />
-                  <Route path="/blog/:tag" element={<BlogList />} />
-                  <Route path="/blog/:tag/:id" element={<BlogPost />} />
-                  <Route path="/interests" element={<Interests />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </ErrorBoundary>
-          </Layout>
+          <Header />
+          <ErrorBoundary fallback={<ErrorMessage />}>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<BlogHome />} />
+                <Route path="/blog/:tag" element={<BlogList />} />
+                <Route path="/blog/:tag/:id" element={<BlogPost />} />
+                <Route path="/interests" element={<Interests />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+          <Footer />
         </Router>
       </ThemeProvider>
     </HelmetProvider>

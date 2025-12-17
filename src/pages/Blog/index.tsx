@@ -16,7 +16,6 @@ export default function TagCloudPage() {
     id: tag.name,
     radius: 20 + Math.sqrt(tag.count) * 8,
     count: tag.count,
-    color: tag.color,
   }));
 
   // 处理标签点击
@@ -28,7 +27,7 @@ export default function TagCloudPage() {
     <>
       <MetaTags title="Blog" description="博客主页" />
 
-      <div className="container animate-slide-up">
+      <div className="page">
         {/* 主标签云区域 */}
         <TagCloud nodes={nodes} onTagClick={handleTagClick} />
 

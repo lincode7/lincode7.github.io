@@ -111,7 +111,7 @@ export default function BlogListPage() {
         description={`浏览${tagParam}标签下的技术文章和心得分享`}
       />
 
-      <div className="container animate-slide-up">
+      <div className="page">
         {/* 返回按钮和标题 */}
         <div className="mb-8 border-b pb-4">
           <Link

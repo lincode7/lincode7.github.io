@@ -1,239 +1,179 @@
 // src/components/layout/Header.tsx (更新版)
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Menu, Moon, Sun, X } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
 import { NAVIGATION } from "../../utils/constants";
+import { cn } from "../../utils/helper";
 
-// 面包屑配置
-const breadcrumbConfig: Record<string, { label: string; path: string }[]> = {
-  "/": [{ label: "首页", path: "/" }],
-  "/blog": [
-    { label: "首页", path: "/" },
-    { label: "博客", path: "/blog" },
-  ],
-  "/blog/:tag": [
-    { label: "首页", path: "/" },
-    { label: "博客", path: "/blog" },
-    { label: "文章列表", path: "/blog/:tag" },
-  ],
-  "/blog/:tag/:id": [
-    { label: "首页", path: "/" },
-    { label: "博客", path: "/blog" },
-    { label: "文章详情", path: "/blog/:tag/:id" },
-  ],
-  "/interests": [
-    { label: "首页", path: "/" },
-    { label: "兴趣", path: "/interests" },
-  ],
-};
+function Logo({ isTop }: { isTop: boolean }) {
+  return (
+    <a
+      href="/"
+      className={cn(
+        "fixed lg:relative top-2.5 lg:top-0",
+        "block w-[97px] justify-self-center lg:justify-self-start",
+        "duration-400",
+        !isTop ? "opacity-100" : "opacity-0 lg:opacity-100"
+      )}
+    >
+      <span
+        className={cn("text-2xl font-bold duration-500", isTop && "opacity-20")}
+      >
+        Xuanlin.
+      </span>
+    </a>
+  );
+}
 
-// 生成面包屑
-const generateBreadcrumbs = (pathname: string, params: any) => {
-  let breadcrumbs: { label: string; path: string }[] = [];
-
-  // 尝试匹配精确路径
-  if (breadcrumbConfig[pathname]) {
-    breadcrumbs = [...breadcrumbConfig[pathname]];
-  } else {
-    // 匹配动态路由
-    for (const [pattern, config] of Object.entries(breadcrumbConfig)) {
-      if (pattern.includes(":")) {
-        const patternParts = pattern.split("/");
-        const pathParts = pathname.split("/");
-
-        if (patternParts.length === pathParts.length) {
-          let match = true;
-          const matchedConfig = [...config];
-
-          for (let i = 0; i < patternParts.length; i++) {
-            if (patternParts[i].startsWith(":")) {
-              const paramName = patternParts[i].slice(1);
-              if (params[paramName]) {
-                matchedConfig[i] = {
-                  ...matchedConfig[i],
-                  label: params[paramName] || matchedConfig[i].label,
-                };
-              }
-            } else if (patternParts[i] !== pathParts[i]) {
-              match = false;
-              break;
-            }
-          }
-
-          if (match) {
-            breadcrumbs = matchedConfig;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  // 默认面包屑
-  if (breadcrumbs.length === 0) {
-    breadcrumbs = [
-      { label: "首页", path: "/" },
-      {
-        label:
-          pathname === "/" ? "主页" : decodeURIComponent(pathname.slice(1)),
-        path: pathname,
-      },
-    ];
-  }
-
-  return breadcrumbs;
-};
-
-export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const location = useLocation();
-  const params = useParams();
-  const breadcrumbs = generateBreadcrumbs(location.pathname, params);
-
-  useEffect(() => {
-    const currentIndex = NAVIGATION.findIndex(
-      (item) => location.pathname == item.path
-    );
-
-    if (currentIndex !== -1) {
-      setActiveIndex(currentIndex);
-    }
-  }, [location.pathname]);
-
+function Menu({
+  isTop,
+  isMenuOpen,
+  setIsMenuOpen,
+}: {
+  isTop: boolean;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isMenuOpen: boolean) => void;
+}) {
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-lg">
-        <div className="container mx-auto h-16 flex-between">
-          {/* Logo */}
-          <Link to="/" className="flex-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-accent flex-center  animate-pulse-slow">
-              <span className="text-white font-bold ">Hu</span>
-            </div>
-            <span className="text-xl font-bold hidden sm:inline-block">
-              Xuanlin's Blog
-            </span>
-          </Link>
-
-          {/* 桌面导航 */}
-          <nav className="hidden md:flex flex-center gap-3 relative">
-            <div
-              className="absolute inset-0 z-10  bg-accent rounded-lg transition-all duration-300"
-              style={{
-                transform: `translateX(${activeIndex * 100}%)`,
-                width: `calc(100% / ${NAVIGATION.length})`,
-              }}
-            />
-            {NAVIGATION.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="z-10 flex-center gap-2 px-3 py-2 rounded-lg transition-colors"
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </Link>
-            ))}
-          </nav>
-
-          {/* 右侧操作区 */}
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-
-            {/* 移动端菜单按钮 */}
-            <button
-              className="md:hidden p-2 rounded-lg hover:bg-accent/10"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="切换菜单"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* 面包屑导航 (独立区域) */}
-      <div className="border-b bg-gray-50/50 dark:bg-gray-900/50">
-        <div className="container mx-auto py-3">
-          <nav className="flex-left text-sm">
-            {breadcrumbs.map((crumb, index) => (
-              <div key={crumb.path} className="flex-center animate-slide-right">
-                {index > 0 && (
-                  <ChevronRight className="mx-2 text-gray-400" size={14} />
-                )}
-                {crumb.path ? (
-                  <Link
-                    to={crumb.path}
-                    className={`${
-                      index === breadcrumbs.length - 1
-                        ? "text-gray-900 dark:text-gray-100 font-medium"
-                        : "text-gray-600 dark:text-gray-400 hover:text-primary"
-                    } transition-colors`}
-                  >
-                    {crumb.label}
-                  </Link>
-                ) : (
-                  <span className="text-gray-900 dark:text-gray-100 font-medium">
-                    {crumb.label}
-                  </span>
-                )}
-              </div>
-            ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* 移动端菜单 */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b"
-          >
-            <div className="container mx-auto px-4 py-4">
-              <nav className="flex flex-col gap-2">
-                {NAVIGATION.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      location.pathname === item.path
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-accent/10"
-                    }`}
-                  >
-                    {item.icon}
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </motion.div>
+      <button
+        className={cn(
+          "fixed lg:absolute left-[calc(50%-40px)] lg:left-auto bottom-0 lg:bottom-[initial] lg:top-0",
+          "py-[15px] lg:py-[25px] justify-self-center z-20 flex flex-col items-center gap-2.5",
+          "text-center text-[9px] tracking-[0.0em] uppercase",
+          "group",
+          "transition-opacity duration-500",
+          !isMenuOpen && isTop && "pointer-events-none opacity-0"
         )}
-      </AnimatePresence>
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        <div className="bg-foreground w-20 lg:w-[140px] lg:group-hover:w-[150px] duration-400 h-[5px] rounded-[3px]" />
+        <span
+          key={isMenuOpen ? 1 : 0}
+          className="font-semibold animate-fade-in"
+        >
+          {isMenuOpen ? "Fermer" : "Menu"}
+        </span>
+      </button>
+      {/* Bottom Menu Mask (mobile only) */}
+      <div
+        className={cn(
+          "fixed bottom-0 left-0 w-full h-[70px] z-0 lg:hidden bg-linear-to-t from-background to-background/40 duration-500",
+          isTop && "opacity-0"
+        )}
+      />
     </>
   );
 }
 
-function ThemeToggle() {
+function Nav({ isMenuOpen }: { isMenuOpen: boolean }) {
+  return (
+    <div
+      className={cn(
+        "fixed bottom-2.5 lg:bottom-[initial] lg:top-0 left-0",
+        "w-full pt-2.5 px-2.5 z-10",
+        !isMenuOpen && "pointer-events-none"
+      )}
+    >
+      <nav className="relative w-full text-center pt-10 lg:pt-[15px] pb-2.5 lg:flex lg:flex-col lg:items-center lg:gap-20">
+        <ul
+          className={cn(
+            "relative mb-[50px] lg:mb-[30px] lg:mt-[90px] grid gap-[5px] lg:gap-0 z-10 group"
+          )}
+        >
+          {...NAVIGATION.map((page, index) => {
+            return (
+              <li key={index} className="uppercase overflow-hidden">
+                <a
+                  key={index}
+                  href={page.path}
+                  className={cn(
+                    "block mx-auto text-2xl md:text-4xl font-semibold text-foreground/70",
+                    isMenuOpen
+                      ? cn(
+                          "translate-y-0 opacity-100",
+                          "duration-400 delay-400",
+                          "group-hover:opacity-20 group-hover:hover:opacity-100"
+                        )
+                      : cn(
+                          "translate-y-[110%] lg:-translate-y-[110%] opacity-0",
+                          "duration-500"
+                        )
+                  )}
+                >
+                  {page.name}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <div
+          className={cn(
+            "absolute top-0 left-0 w-full h-full z-0",
+            "rounded-[10px] backdrop-blur-[100px] bg-muted/40",
+            "origin-bottom lg:origin-top",
+            isMenuOpen
+              ? "scale-y-100 transition-transform duration-800"
+              : "scale-y-0 transition-transform duration-600 delay-200"
+          )}
+        />
+      </nav>
+    </div>
+  );
+}
+
+function ThemeToggle({ className }: { className: string }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className={cn(
+        "p-2 rounded-lg hover:text-primary duration-400",
+        className
+      )}
       aria-label="切换主题"
     >
       {theme === "light" ? (
-        <Moon className="w-5 h-5" />
+        <Moon size={20} className="animate-fade-in" />
       ) : (
-        <Sun className="w-5 h-5" />
+        <Sun size={20} className="animate-fade-in" />
       )}
     </button>
+  );
+}
+
+export default function Header() {
+  const [isTop, setIsTop] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleScroll = () => setIsTop(window.scrollY === 0);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      <header
+        className={cn(
+          "absolute lg:fixed w-full grid grid-cols-3 items-center py-2.5 md:py-[25px] px-[50px] z-20 bg-linear-to-b from-background via-background/40 to-transparent",
+          !isTop && "before:opacity-100 lg:before:content-none"
+        )}
+      >
+        <Logo isTop={isTop} />
+
+        <Menu
+          isTop={isTop}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+        />
+
+        <Nav isMenuOpen={isMenuOpen} />
+        {/* Action */}
+        <ThemeToggle className="absolute lg:fixed top-[25px] lg:top-0 right-5 lg:right-[50px] px-[11px] lg:py-[25px] pt-2 pb-1.5" />
+      </header>
+    </>
   );
 }

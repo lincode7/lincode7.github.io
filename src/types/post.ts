@@ -10,13 +10,13 @@ export interface Post {
   content: string;
 }
 
-export interface CategoryStats {
+export interface TagStats {
   name: string;
   count: number;
 }
 
-export interface TagStats extends CategoryStats {
-  color?: string;
+export interface CategoryStats extends TagStats {
+  hotTags: string[];
 }
 
 export interface MonthlyStats {
@@ -26,7 +26,7 @@ export interface MonthlyStats {
 
 export interface BlogIndex {
   byID: Record<string, number>;
-  byCategory: Record<string, number[]>;
+  byCategory: Record<string, [number[], string[]]>;
   byTag: Record<string, number[]>;
   byMonth: Record<string, number[]>;
   recent: number[];

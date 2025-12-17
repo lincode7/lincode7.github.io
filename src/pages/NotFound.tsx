@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { ArrowLeft, Home, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import MetaTags from "../components/seo/MetaTags";
@@ -12,13 +11,8 @@ export default function NotFound() {
         description="抱歉，您访问的页面不存在或已被移除"
       />
 
-      <div className="container text-center">
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
+      <div className="page text-center">
+        <div className="mb-8 animate-scale-in">
           <div className="text-9xl font-bold text-primary opacity-20 mb-4">
             404
           </div>
@@ -26,14 +20,9 @@ export default function NotFound() {
           <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
             抱歉，您访问的页面可能已被移除、重命名或暂时不可用
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="max-w-md mx-auto space-y-4"
-        >
+        <div className="max-w-md mx-auto space-y-4 animate-slide-up delay-500">
           <div className="p-6 bg-accent/5 rounded-xl mb-6">
             <div className="flex items-center gap-3 mb-3">
               <Search className="text-primary" />
@@ -76,7 +65,7 @@ export default function NotFound() {
               </a>
             </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </>
   );
