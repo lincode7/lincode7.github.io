@@ -6,6 +6,7 @@ import type {
   MusicInterest,
   TravelInterest,
 } from "../../types/interests";
+import { cn } from "../../utils/helper";
 import {
   Card,
   CardContent,
@@ -31,7 +32,10 @@ export default function InterestCard({ data, className }: InterestCardProps) {
 
   return (
     <Card
-      className={`overflow-hidden break-inside-avoidmb-6 flex flex-col mb-4 gap-1.5 hover-scaled hover:p-2 ${className}`}
+      className={cn(
+        "overflow-hidden break-inside-avoid flex flex-col mb-4 gap-1.5 hover-shadow duration-500",
+        className
+      )}
     >
       <CardHeader>
         <CardTitle>{data.title}</CardTitle>
