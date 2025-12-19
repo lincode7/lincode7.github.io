@@ -88,7 +88,7 @@ export default function InterestCard({ data, className }: InterestCardProps) {
         )}
 
         {/* date */}
-        <div className="flex-left gap-1.5 text-accent">
+        <div className="flex-left gap-1.5 text-foreground/40">
           <Calendar size={16} />
           <span>{data.date}</span>
         </div>

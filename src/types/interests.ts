@@ -1,6 +1,9 @@
-export interface Interest {
+interface InterestMeta {
   id: string;
   type: string;
+}
+
+export interface Interest extends InterestMeta {
   title: string;
   image?: string;
   description: string;
@@ -33,8 +36,12 @@ export interface TravelInterest extends Interest {
 }
 
 export interface InterestIndex {
-  byID: Record<string, number>;
-  byType: Record<string, number[]>;
+  paths: Record<string, InterestMeta>;
+  pathByID: Record<string, string>;
+
+  sortedID?: string[];
+  recentID?: Set<string>;
+  idByType?: Record<string, string[]>;
 }
 
 export interface InterestRepo {
