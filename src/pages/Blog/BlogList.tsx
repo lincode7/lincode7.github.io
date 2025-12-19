@@ -91,7 +91,7 @@ const tagsResource = createSuspenseResource(blogAPI.getTags);
 
 export default function BlogListPage() {
   const { tag: tagParam } = useParams<{ tag: string }>();
-  const posts = postsResource.read(1, 50, tagParam).posts;
+  const { data: posts } = postsResource.read(1, 50, tagParam);
   const tags = tagsResource.read();
   const tagStats = tags.find((tag) => tag.name === tagParam);
   const relatedTags = tags
