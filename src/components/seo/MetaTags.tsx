@@ -13,8 +13,8 @@ interface MetaTagsProps {
 export default function MetaTags({
   title,
   description,
-  keywords = ["Home", "Blogs", "Technical", "Interests"],
-  image = "https://via.placeholder.com/1200x630",
+  keywords = ["Blogs", "Notes"],
+  image = `${window.location.origin}/default.png`,
   url = window.location.href,
   type = "website",
 }: MetaTagsProps) {
