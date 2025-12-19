@@ -23,7 +23,7 @@ export const blogAPI = {
     const start = (page - 1) * limit;
     const end = start + limit;
 
-    const { sortedID, idByTag } = loadPostPath();
+    const { sortedID, idByTag } = await loadPostPath();
 
     if (tag) {
       if (idByTag) {
@@ -34,7 +34,7 @@ export const blogAPI = {
       }
 
       const sorted = await fetchAll();
-      const result = updateIndex(sorted, { tag }).tagPosts;
+      const result = (await updateIndex(sorted, { tag })).tagPosts;
       return {
         data: result.slice(start, end),
         hasMore: end > result!.length,
@@ -49,7 +49,7 @@ export const blogAPI = {
     }
 
     const sorted = await fetchAll();
-    updateIndex(sorted);
+    await updateIndex(sorted);
     return {
       data: sorted.slice(start, end),
       hasMore: end > sorted.length,
@@ -63,10 +63,10 @@ export const blogAPI = {
 
   // 获取分类统计
   async getCategories(): Promise<CategoryStats[]> {
-    const index = loadPostPath();
+    const index = await loadPostPath();
     if (!index.idByCategory || !index.tagByCategory) {
       const sorted = await fetchAll();
-      updateIndex(sorted);
+      await updateIndex(sorted);
     }
 
     const { idByCategory, tagByCategory } = index;
@@ -79,10 +79,10 @@ export const blogAPI = {
 
   // 获取标签统计
   async getTags(): Promise<TagStats[]> {
-    const index = loadPostPath();
+    const index = await loadPostPath();
     if (!index.idByTag) {
       const sorted = await fetchAll();
-      updateIndex(sorted);
+      await updateIndex(sorted);
     }
 
     const { idByTag } = index;
@@ -94,10 +94,10 @@ export const blogAPI = {
 
   // 获取月度统计
   async getMonthly(): Promise<MonthlyStats[]> {
-    const index = loadPostPath();
+    const index = await loadPostPath();
     if (!index.idByMonth) {
       const sorted = await fetchAll();
-      updateIndex(sorted);
+      await updateIndex(sorted);
     }
 
     const { idByMonth } = index;
@@ -108,7 +108,7 @@ export const blogAPI = {
   },
 };
 
-const updateIndex = (
+const updateIndex = async (
   sorted: Post[],
   option?: {
     recent?: boolean;
@@ -116,12 +116,14 @@ const updateIndex = (
     tag?: string;
   }
 ) => {
-  const [indexRecent, recentPosts] = updateRecent(
+  const [indexRecent, recentPosts] = await updateRecent(
     new Date(sorted[0].date),
     option?.recent
   );
-  const [indexCategory, categoryPosts] = updateByCategory(option?.category);
-  const [indexTag, tagPosts] = updateByTag(option?.tag);
+  const [indexCategory, categoryPosts] = await updateByCategory(
+    option?.category
+  );
+  const [indexTag, tagPosts] = await updateByTag(option?.tag);
   sorted.forEach((post) => {
     indexRecent(post);
     indexCategory(post);
@@ -135,9 +137,11 @@ const updateIndex = (
   };
 };
 
-const updateByCategory = (category?: string): [indexFn, Post[]] => {
+const updateByCategory = async (
+  category?: string
+): Promise<[indexFn, Post[]]> => {
   const byCategory: Post[] = [];
-  const index = loadPostPath();
+  const index = await loadPostPath();
   index.idByCategory ??= {};
   return [
     (post: Post) => {
@@ -149,9 +153,9 @@ const updateByCategory = (category?: string): [indexFn, Post[]] => {
   ];
 };
 
-const updateByTag = (tag?: string): [indexFn, Post[]] => {
+const updateByTag = async (tag?: string): Promise<[indexFn, Post[]]> => {
   const byTag: Post[] = [];
-  const index = loadPostPath();
+  const index = await loadPostPath();
   index.idByTag ??= {};
   index.tagByCategory ??= {};
   return [
@@ -168,12 +172,12 @@ const updateByTag = (tag?: string): [indexFn, Post[]] => {
   ];
 };
 
-const updateRecent = (
+const updateRecent = async (
   recentDate: Date,
   getRecent = false
-): [indexFn, Post[]] => {
+): Promise<[indexFn, Post[]]> => {
   const recent: Post[] = [];
-  const index = loadPostPath();
+  const index = await loadPostPath();
   index.recentID ??= [];
   return [
     (post: Post) => {
@@ -191,7 +195,7 @@ const fetchByID = async (ids: string[]): Promise<Post[]> =>
   await Promise.all(ids.map(fetchText));
 
 const fetchAll = async (): Promise<Post[]> => {
-  const index = loadPostPath();
+  const index = await loadPostPath();
   const ids = Object.keys(index.pathByID);
   const all = await Promise.all(ids.map(fetchText));
   const sorted = sortByDateAndTitle(all);
@@ -208,7 +212,7 @@ const sortByDateAndTitle = (arr: Post[]): Post[] =>
   );
 
 const fetchText = async (id: string): Promise<Post> => {
-  const path = loadPostPath().pathByID[id];
+  const path = (await loadPostPath()).pathByID[id];
   const response = await fetch(path);
   const fileContent = await response.text();
   const { data, content } = matter(fileContent);
@@ -220,24 +224,27 @@ const fetchText = async (id: string): Promise<Post> => {
 };
 
 const loadPostPath = (() => {
-  const index: BlogIndex = { pathByID: {} };
-  let loaded = false;
+  let index: Promise<BlogIndex> | null = null;
 
   return () => {
-    if (loaded) return index;
+    if (index) return index;
 
-    for (const original_path in import.meta.glob("/public/posts/*/*.md", {
-      query: "?url",
-    })) {
-      const path = original_path.replace(/^\/public/, "");
-      const match = path.match(/\/([^\/]+)\.md$/);
-      if (match) {
-        const [, id] = match;
-        index.pathByID[id] = path;
-      }
-    }
+    index = (async () => {
+      const r = await fetch("./posts-index.json");
+      const pathIndex: string[] = await r.json();
 
-    loaded = true;
+      const index: BlogIndex = { pathByID: {} };
+      pathIndex.forEach((path) => {
+        const match = path.match(/\/([^\/]+)\.md$/);
+        if (match) {
+          const [, id] = match;
+          index.pathByID[id] = path;
+        }
+      });
+
+      return index;
+    })();
+
     return index;
   };
 })();

@@ -5,14 +5,14 @@ import { isRecent } from "../helper";
 export const interestsAPI = {
   // 获取近期活动
   async getRecentInterests(): Promise<Interest[]> {
-    const { recentID } = loadInterestPath();
+    const { recentID } = await loadInterestPath();
     if (recentID) {
       const ids = [...recentID];
       return fetchByID(ids);
     }
 
     const sorted = await fetchAll();
-    return updateIndex(sorted, { recent: true }).recentPosts;
+    return (await updateIndex(sorted, { recent: true })).recentPosts;
   },
 
   // 按类型获取兴趣项目
@@ -27,7 +27,7 @@ export const interestsAPI = {
     const start = (page - 1) * limit;
     const end = start + limit;
 
-    const { sortedID, idByType } = loadInterestPath();
+    const { sortedID, idByType } = await loadInterestPath();
 
     if (type) {
       if (idByType) {
@@ -38,7 +38,7 @@ export const interestsAPI = {
       }
 
       const sorted = await fetchAll();
-      const result = updateIndex(sorted, { type }).typePosts;
+      const result = (await updateIndex(sorted, { type })).typePosts;
       return {
         data: result!.slice(start, end) as Interest[],
         hasMore: end > result!.length,
@@ -53,7 +53,7 @@ export const interestsAPI = {
     }
 
     const sorted = await fetchAll();
-    updateIndex(sorted);
+    await updateIndex(sorted);
     return {
       data: sorted.slice(start, end),
       hasMore: end > sorted.length,
@@ -61,18 +61,18 @@ export const interestsAPI = {
   },
 };
 
-const updateIndex = (
+const updateIndex = async (
   sorted: Interest[],
   option?: {
     recent?: boolean;
     type?: string;
   }
 ) => {
-  const [indexRecent, recentPosts] = updateRecent(
+  const [indexRecent, recentPosts] = await updateRecent(
     new Date(sorted[0].date),
     option?.recent
   );
-  const [indexTtype, typePosts] = updateByType(option?.type);
+  const [indexTtype, typePosts] = await updateByType(option?.type);
   sorted.forEach((interest) => {
     indexRecent(interest);
     indexTtype(interest);
@@ -83,9 +83,9 @@ const updateIndex = (
   };
 };
 
-const updateByType = (type?: string): [indexFn, Interest[]] => {
+const updateByType = async (type?: string): Promise<[indexFn, Interest[]]> => {
   const byType: Interest[] = [];
-  const index = loadInterestPath();
+  const index = await loadInterestPath();
   index.idByType ??= {};
   return [
     (interest) => {
@@ -97,12 +97,12 @@ const updateByType = (type?: string): [indexFn, Interest[]] => {
   ];
 };
 
-const updateRecent = (
+const updateRecent = async (
   recentDate: Date,
   getReccent = false
-): [indexFn, Interest[]] => {
+): Promise<[indexFn, Interest[]]> => {
   const recent: Interest[] = [];
-  const index = loadInterestPath();
+  const index = await loadInterestPath();
   index.recentID ??= new Set();
   return [
     (interest) => {
@@ -117,7 +117,7 @@ const updateRecent = (
 type indexFn = (post: Interest) => void;
 
 const fetchByID = async (ids: string[]): Promise<Interest[]> => {
-  const { pathByID } = loadInterestPath();
+  const { pathByID } = await loadInterestPath();
   const paths = ids.map((id) => pathByID[id]);
   const result = (await Promise.all(paths.map(fetchJSON))).flat();
   const filter = new Set(ids);
@@ -125,7 +125,7 @@ const fetchByID = async (ids: string[]): Promise<Interest[]> => {
 };
 
 const fetchAll = async (): Promise<Interest[]> => {
-  const index = loadInterestPath();
+  const index = await loadInterestPath();
   const path = Object.keys(index.paths);
   const all = (await Promise.all(path.map(fetchJSON))).flat();
   const sorted = sortByDateAndTitle(all);
@@ -143,7 +143,7 @@ const sortByDateAndTitle = (arr: Interest[]): Interest[] =>
   );
 
 const fetchJSON = async (path: string): Promise<Interest | Interest[]> => {
-  const { paths, pathByID } = loadInterestPath();
+  const { paths, pathByID } = await loadInterestPath();
   const meta = paths[path];
   const response = await fetch(path);
   const items = await response.json();
@@ -167,25 +167,28 @@ const fetchJSON = async (path: string): Promise<Interest | Interest[]> => {
 };
 
 const loadInterestPath = (() => {
-  const index: InterestIndex = { paths: {}, pathByID: {} };
-  let loaded = false;
+  let index: Promise<InterestIndex> | null = null;
 
-  return () => {
-    if (loaded) return index;
+  return async () => {
+    if (index) return index;
 
-    for (const original_path in import.meta.glob("/public/interests/*/*.json", {
-      query: "?url",
-    })) {
-      const path = original_path.replace(/^\/public/, "");
-      const match = path.match(/\/interests\/([^\/]+)\/([^\/]+)\.json$/);
-      if (match) {
-        const [, type, id] = match;
-        index.paths[path] = { id, type };
-        index.pathByID[id] = path;
-      }
-    }
+    index = (async () => {
+      const r = await fetch("./interests-index.json");
+      const pathIndex: string[] = await r.json();
 
-    loaded = true;
+      const index: InterestIndex = { paths: {}, pathByID: {} };
+      pathIndex.forEach((path) => {
+        const match = path.match(/\/interests\/([^\/]+)\/([^\/]+)\.json$/);
+        if (match) {
+          const [, type, id] = match;
+          index.paths[path] = { id, type };
+          index.pathByID[id] = path;
+        }
+      });
+
+      return index;
+    })();
+
     return index;
   };
 })();
