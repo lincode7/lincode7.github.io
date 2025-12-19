@@ -82,7 +82,7 @@ export default function BlogPost() {
         type="article"
       />
 
-      <article className="page">
+      <article className="page md:pt-20">
         {/* 文章头部 */}
         <header className="mb-8">
           {/* 返回按钮 */}

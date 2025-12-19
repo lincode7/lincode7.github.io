@@ -111,12 +111,12 @@ export default function BlogListPage() {
         description={`浏览${tagParam}标签下的技术文章和心得分享`}
       />
 
-      <div className="page">
+      <div className="page md:pt-20">
         {/* 返回按钮和标题 */}
         <div className="mb-8 border-b pb-4">
           <Link
             to="/blog"
-            className="flex-left gap-2 text-foreground/50 hover:text-primary transition-colors mb-4"
+            className="flex-left gap-2 text-foreground/50 hover:text-primary mb-4"
           >
             <ArrowLeft size={20} />
             返回标签云

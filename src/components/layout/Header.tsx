@@ -155,25 +155,23 @@ export default function Header() {
   }, []);
 
   return (
-    <>
-      <header
-        className={cn(
-          "absolute lg:fixed w-full grid grid-cols-3 items-center py-2.5 md:py-[25px] px-[50px] z-20 bg-linear-to-b from-background via-background/40 to-transparent",
-          !isTop && "before:opacity-100 lg:before:content-none"
-        )}
-      >
-        <Logo isTop={isTop} />
+    <header
+      className={cn(
+        "absolute lg:fixed w-full grid grid-cols-3 items-center py-2.5 md:py-[25px] px-[50px] z-20 bg-linear-to-b from-background via-background/40 to-transparent",
+        !isTop && "before:opacity-100 lg:before:content-none"
+      )}
+    >
+      <Logo isTop={isTop} />
 
-        <Menu
-          isTop={isTop}
-          isMenuOpen={isMenuOpen}
-          setIsMenuOpen={setIsMenuOpen}
-        />
+      <Menu
+        isTop={isTop}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+      />
 
-        <Nav isMenuOpen={isMenuOpen} />
-        {/* Action */}
-        <ThemeToggle className="absolute lg:fixed top-[25px] lg:top-0 right-5 lg:right-[50px] px-[11px] lg:py-[25px] pt-2 pb-1.5" />
-      </header>
-    </>
+      <Nav isMenuOpen={isMenuOpen} />
+      {/* Action */}
+      <ThemeToggle className="absolute lg:fixed top-[25px] lg:top-0 right-5 lg:right-[50px] px-[11px] lg:py-[25px] pt-2 pb-1.5" />
+    </header>
   );
 }
