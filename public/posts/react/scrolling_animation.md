@@ -83,7 +83,7 @@ readTime: 5
 
 ## 场景 1：组件从底部滚动加载
 
-![slidup](/posts/slideup.gif)
+![alt text](scrolling_animation/slideup.gif)
 
 ```typescript
 function SlideUP({
@@ -125,7 +125,7 @@ function SlideUP({
 
 ## 场景 2：组件从顶部折叠消失
 
-![flip_onTop](/posts/flip_onTop.gif)
+![alt text](scrolling_animation/flip_onTop.gif)
 
 ```typescript
 function Flip_onTop() {
@@ -166,7 +166,7 @@ function Flip_onTop() {
 
 ## 场景 2.1： 列表从顶部滚动消失
 
-![list_flip_onTop](/posts/list_flip_onTop.gif)
+![alt text](scrolling_animation/list_flip_onTop.gif)
 
 ```typescript
 function List_Flip_onTop() {
@@ -215,7 +215,7 @@ function List_Flip_onTop() {
 
 ## 场景 3：无限滚动列表
 
-![infinite_list](/posts/infinite_list.gif)
+![alt text](scrolling_animation/infinite_list.gif)
 
 ```typescript
 let n = 0;

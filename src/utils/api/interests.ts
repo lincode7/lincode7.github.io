@@ -1,70 +1,120 @@
 import type { Interest, InterestIndex } from "../../types/interests";
-import { isRecent } from "./posts";
+import { isRecent } from "../helper";
 
 // 兴趣相关API
 export const interestsAPI = {
   // 获取近期活动
   async getRecentInterests(): Promise<Interest[]> {
     const { recentID } = loadInterestPath();
-    if (recentID?.size) return fetchRecent();
+    if (recentID) {
+      const ids = [...recentID];
+      return fetchByID(ids);
+    }
 
     const sorted = await fetchAll();
-    return updateRecent(sorted);
+    return updateIndex(sorted, { recent: true }).recentPosts;
   },
 
   // 按类型获取兴趣项目
-  async getList(page = 1, limit = 10, type?: string): Promise<Interest[]> {
+  async getInterests(
+    page = 1,
+    limit = 10,
+    type?: string
+  ): Promise<{
+    data: Interest[];
+    hasMore: boolean;
+  }> {
     const start = (page - 1) * limit;
     const end = start + limit;
 
     const { sortedID, idByType } = loadInterestPath();
 
     if (type) {
-      if (idByType) return fetchByID(idByType[type].slice(start, end));
+      if (idByType) {
+        return {
+          data: await fetchByID(idByType[type].slice(start, end)),
+          hasMore: end > idByType[type].length,
+        };
+      }
 
       const sorted = await fetchAll();
-      return updateByType(sorted, type)!.slice(start, end) as Interest[];
+      const result = updateIndex(sorted, { type }).typePosts;
+      return {
+        data: result!.slice(start, end) as Interest[],
+        hasMore: end > result!.length,
+      };
     }
 
-    if (sortedID) return fetchByID(sortedID.slice(start, end));
+    if (sortedID) {
+      return {
+        data: await fetchByID(sortedID.slice(start, end)),
+        hasMore: end > sortedID.length,
+      };
+    }
 
     const sorted = await fetchAll();
-    updateByType(sorted);
-    return sorted.slice(start, end);
+    updateIndex(sorted);
+    return {
+      data: sorted.slice(start, end),
+      hasMore: end > sorted.length,
+    };
   },
 };
 
-const updateByType = (sorted: Interest[], type?: string) => {
+const updateIndex = (
+  sorted: Interest[],
+  option?: {
+    recent?: boolean;
+    type?: string;
+  }
+) => {
+  const [indexRecent, recentPosts] = updateRecent(
+    new Date(sorted[0].date),
+    option?.recent
+  );
+  const [indexTtype, typePosts] = updateByType(option?.type);
+  sorted.forEach((interest) => {
+    indexRecent(interest);
+    indexTtype(interest);
+  });
+  return {
+    recentPosts,
+    typePosts,
+  };
+};
+
+const updateByType = (type?: string): [indexFn, Interest[]] => {
   const byType: Interest[] = [];
   const index = loadInterestPath();
   index.idByType ??= {};
-  sorted.forEach((i) => {
-    type && i.type === type && byType.push(i);
-    index.idByType![i.type] ??= [];
-    index.idByType![i.type].push(i.id);
-  });
-  return type && byType;
+  return [
+    (interest) => {
+      type && interest.type === type && byType.push(interest);
+      index.idByType![interest.type] ??= [];
+      index.idByType![interest.type].push(interest.id);
+    },
+    byType,
+  ];
 };
 
-const fetchRecent = async (): Promise<Interest[]> => {
-  const { recentID, pathByID } = loadInterestPath();
-  const recentPath = [...new Set([...recentID!].map((id) => pathByID[id]))];
-  const result = (await Promise.all(recentPath.map(fetchJSON))).flat();
-  return sortByDateAndTitle(result.filter((i) => recentID!.has(i.id)));
-};
-
-const updateRecent = (sorted: Interest[]): Interest[] => {
-  const recentDate = new Date(sorted[0].date);
-  const recent = sorted.filter((interest) =>
-    isRecent(new Date(interest.date), recentDate)
-  );
-
+const updateRecent = (
+  recentDate: Date,
+  getReccent = false
+): [indexFn, Interest[]] => {
+  const recent: Interest[] = [];
   const index = loadInterestPath();
   index.recentID ??= new Set();
-  recent.forEach((i) => index.recentID!.add(i.id));
-
-  return recent;
+  return [
+    (interest) => {
+      if (!isRecent(new Date(interest.date), recentDate)) return;
+      getReccent && recent.push(interest);
+      index.recentID!.add(interest.id);
+    },
+    recent,
+  ];
 };
+
+type indexFn = (post: Interest) => void;
 
 const fetchByID = async (ids: string[]): Promise<Interest[]> => {
   const { pathByID } = loadInterestPath();
@@ -76,9 +126,9 @@ const fetchByID = async (ids: string[]): Promise<Interest[]> => {
 
 const fetchAll = async (): Promise<Interest[]> => {
   const index = loadInterestPath();
-  const sorted = sortByDateAndTitle(
-    (await Promise.all(Object.keys(index.paths).map(fetchJSON))).flat()
-  );
+  const path = Object.keys(index.paths);
+  const all = (await Promise.all(path.map(fetchJSON))).flat();
+  const sorted = sortByDateAndTitle(all);
 
   index.sortedID = sorted.map((i) => i.id);
 

@@ -99,3 +99,10 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
     return false;
   }
 };
+
+// 是否最新及其7天
+export const isRecent = (date: Date, recentDate: Date): boolean => {
+  const sevenDaysAgo = new Date(recentDate);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  return date >= sevenDaysAgo && date <= recentDate;
+};

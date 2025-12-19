@@ -2,7 +2,7 @@
 title: "Tailwindcss4 动画实践"
 date: "2025-12-15"
 tags: ["CSS", "Tailwindcss", "React"]
-category: "学习"
+category: "技术"
 excerpt: "动画"
 coverImage: "https://tse4-mm.cn.bing.net/th/id/OIP-C.tTTuwLk-IMK6_JEiQ53m-QHaEo?w=245&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.1&pid=1.7&rm=3&ucfimg=1"
 readTime: 5

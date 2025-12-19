@@ -5,18 +5,20 @@ import InterestCard from "../components/ui/InterestCard";
 import { interestsAPI } from "../utils/api/interests";
 import { createSuspenseResource } from "../utils/suspense";
 
-const interestsResource = createSuspenseResource(interestsAPI.getList);
+const interestsResource = createSuspenseResource(interestsAPI.getInterests);
 
 export default function Interests() {
-  const [interests, setInterests] = useState(() => interestsResource.read());
+  const [interests, setInterests] = useState(
+    () => interestsResource.read().data
+  );
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
   const loadMore = () => {
     const nextPage = page + 1;
-    const data = interestsResource.read(nextPage);
-    setHasMore(data.length !== 0);
-    setInterests((prev) => [...prev, ...data]);
+    const r = interestsResource.read(nextPage);
+    setHasMore(r.hasMore);
+    setInterests((prev) => [...prev, ...r.data]);
     setPage(nextPage);
   };
 

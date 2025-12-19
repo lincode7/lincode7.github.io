@@ -43,8 +43,3 @@ export interface InterestIndex {
   recentID?: Set<string>;
   idByType?: Record<string, string[]>;
 }
-
-export interface InterestRepo {
-  data: Interest[];
-  index: InterestIndex;
-}

@@ -18,9 +18,9 @@ readTime: 5
 
 > [QUDE](https://qude.audio)： LOGO 和网页配色统一，排版简洁，细节把控到位，完美契合极简风的质感要求。
 
-| 大屏                                         | 小屏                                                |
-| -------------------------------------------- | --------------------------------------------------- |
-| ![最终效果图](/posts/tailwindcss_layout.gif) | ![最终效果图](/posts/tailwindcss_layout_mobile.gif) |
+| 大屏                                                   | 小屏                                                          |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| ![alt text](tailwindcss_layout/tailwindcss_layout.gif) | ![alt text](tailwindcss_layout/tailwindcss_layout_mobile.gif) |
 
 ## 主题配置
 

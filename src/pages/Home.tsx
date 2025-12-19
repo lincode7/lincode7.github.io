@@ -198,7 +198,7 @@ function CategoresAndTags({ className }: { className?: string }) {
 const recentPostsResource = createSuspenseResource(blogAPI.getPosts);
 
 function RecentPosts({ className }: { className?: string }) {
-  const { posts: recentPosts } = recentPostsResource.read(1, 5);
+  const { data: recentPosts } = recentPostsResource.read(1, 5);
   const num = recentPosts.length;
 
   return (

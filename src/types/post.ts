@@ -1,4 +1,4 @@
-export interface Post {
+interface PostMeta {
   id: string;
   title: string;
   date: string;
@@ -7,6 +7,9 @@ export interface Post {
   excerpt: string;
   coverImage?: string;
   readTime?: number;
+}
+
+export interface Post extends PostMeta {
   content: string;
 }
 
@@ -25,14 +28,13 @@ export interface MonthlyStats {
 }
 
 export interface BlogIndex {
-  byID: Record<string, number>;
-  byCategory: Record<string, [number[], string[]]>;
-  byTag: Record<string, number[]>;
-  byMonth: Record<string, number[]>;
-  recent: number[];
-}
+  pathByID: Record<string, string>;
 
-export interface BlogRepo {
-  data: Post[];
-  index: BlogIndex;
+  sortedID?: string[];
+  recentID?: string[];
+  idByCategory?: Record<string, string[]>;
+  idByTag?: Record<string, string[]>;
+  idByMonth?: Record<string, string[]>;
+
+  tagByCategory?: Record<string, Set<string>>;
 }
