@@ -1,0 +1,1 @@
+const o=n=>{const t=new Map;let r=new Map;return{read(...a){const e=JSON.stringify(a);if(r.has(e)){const s=r.get(e);if(s.status==="success")return s.data;throw s.error}if(!t.has(e)){const s=n(...a).then(c=>{r.set(e,{status:"success",data:c}),t.delete(e)}).catch(c=>{r.set(e,{status:"error",error:c}),t.delete(e)});t.set(e,s)}throw t.get(e)}}};export{o as c};
