@@ -39,7 +39,9 @@ function Menu({
       <button
         className={cn(
           "fixed lg:absolute left-[calc(50%-40px)] lg:left-auto bottom-0 lg:bottom-[initial] lg:top-0",
-          "py-[15px] lg:py-[25px] justify-self-center z-20 flex flex-col items-center gap-2.5",
+          "flex-center flex-col gap-2.5",
+          "py-5 lg:py-6 justify-self-center",
+          "z-20",
           "text-center text-[9px] tracking-[0.0em] uppercase",
           "group",
           "transition-opacity duration-500",
@@ -58,7 +60,10 @@ function Menu({
       {/* Bottom Menu Mask (mobile only) */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 w-full h-[70px] z-0 lg:hidden bg-linear-to-t from-background to-background/40 duration-500",
+          "lg:hidden",
+          "fixed bottom-0 left-0 w-full h-[70px]",
+          "z-0",
+          "bg-linear-to-t from-background to-background/40 duration-500",
           isTop && "opacity-0"
         )}
       />
@@ -122,22 +127,23 @@ function Nav({ isMenuOpen }: { isMenuOpen: boolean }) {
   );
 }
 
-function ThemeToggle({ className }: { className: string }) {
+function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
       className={cn(
-        "p-2 rounded-lg hover:text-primary duration-400",
-        className
+        "absolute lg:fixed top-2.5 lg:top-6 right-5 lg:right-12",
+        "py-1",
+        "rounded-lg hover:text-primary duration-400"
       )}
       aria-label="切换主题"
     >
       {theme === "light" ? (
-        <Moon size={20} className="animate-fade-in" />
+        <Moon className="animate-fade-in" />
       ) : (
-        <Sun size={20} className="animate-fade-in" />
+        <Sun className="animate-fade-in" />
       )}
     </button>
   );
@@ -157,7 +163,11 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "absolute lg:fixed w-full grid grid-cols-3 items-center py-2.5 md:py-[25px] px-[50px] z-20 bg-linear-to-b from-background via-background/40 to-transparent",
+        "absolute lg:fixed w-full",
+        "grid grid-cols-3",
+        "py-2.5 md:py-6 px-12",
+        "z-20",
+        "bg-linear-to-b from-background via-background/40 to-transparent",
         !isTop && "before:opacity-100 lg:before:content-none"
       )}
     >
@@ -171,7 +181,7 @@ export default function Header() {
 
       <Nav isMenuOpen={isMenuOpen} />
       {/* Action */}
-      <ThemeToggle className="absolute lg:fixed top-[25px] lg:top-0 right-5 lg:right-[50px] px-[11px] lg:py-[25px] pt-2 pb-1.5" />
+      <ThemeToggle />
     </header>
   );
 }
