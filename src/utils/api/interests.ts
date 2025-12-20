@@ -143,15 +143,16 @@ const sortByDateAndTitle = (arr: Interest[]): Interest[] =>
   );
 
 const fetchJSON = async (path: string): Promise<Interest | Interest[]> => {
-  const { paths, pathByID } = await loadInterestPath();
+  const index = await loadInterestPath();
+  const { paths } = index;
   const meta = paths[path];
   const response = await fetch(path);
   const items = await response.json();
 
   if (Array.isArray(items)) {
-    return items.map((item, index) => {
-      const id = `${meta.id}_${index}`;
-      pathByID[id] ??= path;
+    return items.map((item, i) => {
+      const id = `${meta.id}_${i}`;
+      index.pathByID[id] = path;
       return {
         ...meta,
         id,
@@ -160,6 +161,8 @@ const fetchJSON = async (path: string): Promise<Interest | Interest[]> => {
     });
   }
 
+  const id: string = items.id;
+  index.pathByID[id] = path;
   return {
     ...meta,
     ...items,
@@ -173,7 +176,7 @@ const loadInterestPath = (() => {
     if (index) return index;
 
     index = (async () => {
-      const r = await fetch("./interests-index.json");
+      const r = await fetch("/interests-index.json");
       const pathIndex: string[] = await r.json();
 
       const index: InterestIndex = { paths: {}, pathByID: {} };

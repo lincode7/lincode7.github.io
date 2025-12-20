@@ -28,7 +28,13 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
-          markdown: ["marked", "marked-highlight", "highlight.js"],
+          markdown: [
+            "marked",
+            "marked-highlight",
+            "highlight.js",
+            "marked-katex-extension",
+            "marked-extended-tables",
+          ],
           utils: ["gray-matter"],
         },
       },

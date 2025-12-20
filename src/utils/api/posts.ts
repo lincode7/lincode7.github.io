@@ -230,7 +230,7 @@ const loadPostPath = (() => {
     if (index) return index;
 
     index = (async () => {
-      const r = await fetch("./posts-index.json");
+      const r = await fetch("/posts-index.json");
       const pathIndex: string[] = await r.json();
 
       const index: BlogIndex = { pathByID: {} };

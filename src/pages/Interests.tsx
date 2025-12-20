@@ -14,18 +14,20 @@ export default function Interests() {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const loadMore = () => {
+  const loadMore = async () => {
     const nextPage = page + 1;
-    const r = interestsResource.read(nextPage);
+    console.log("fetch:", nextPage);
+    const r = await interestsAPI.getInterests(nextPage);
+    console.log(nextPage, r);
     setHasMore(r.hasMore);
     setInterests((prev) => [...prev, ...r.data]);
     setPage(nextPage);
   };
 
   const ref = useOnInView(
-    (inView) => {
+    async (inView) => {
       if (inView && hasMore) {
-        loadMore();
+        await loadMore();
       }
     },
     {
