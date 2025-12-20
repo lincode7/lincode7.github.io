@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/useTheme";
 import { NAVIGATION } from "../../utils/constants";
 import { cn } from "../../utils/helper";
+import { Link } from "react-router-dom";
 
 function Logo({ isTop }: { isTop: boolean }) {
   return (
-    <a
-      href="/"
+    <Link
+      to="/"
       className={cn(
         "fixed lg:relative top-2.5 lg:top-0",
         "block w-[97px] justify-self-center lg:justify-self-start",
@@ -21,7 +22,7 @@ function Logo({ isTop }: { isTop: boolean }) {
       >
         Xuanlin.
       </span>
-    </a>
+    </Link>
   );
 }
 
@@ -89,9 +90,9 @@ function Nav({ isMenuOpen }: { isMenuOpen: boolean }) {
           {...NAVIGATION.map((page, index) => {
             return (
               <li key={index} className="uppercase overflow-hidden">
-                <a
+                <Link
                   key={index}
-                  href={page.path}
+                  to={page.path}
                   className={cn(
                     "block mx-auto text-2xl md:text-4xl font-semibold text-foreground/70",
                     isMenuOpen
@@ -107,7 +108,7 @@ function Nav({ isMenuOpen }: { isMenuOpen: boolean }) {
                   )}
                 >
                   {page.name}
-                </a>
+                </Link>
               </li>
             );
           })}
