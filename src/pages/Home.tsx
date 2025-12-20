@@ -168,8 +168,9 @@ function FixedTags({ hotTags }: { hotTags: string[] }) {
         "bg-background"
       )}
     >
-      {tags.map((tag) => (
+      {tags.map((tag, index) => (
         <li
+          key={index}
           className={cn(
             hotTags.findIndex((name) => name === tag.name) == -1 && "opacity-10"
           )}
