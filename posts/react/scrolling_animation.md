@@ -59,25 +59,25 @@ readTime: 5
    > When you want to loading a target when is visible
 
    ```typescript
-   function X(...) {
-      return (
-        <InView threshold={Array.from({ length: 101 }, (_, i) => i*0.01)}>
-          <p>you alway can see me</p>
-          ({inView, ref, entry} => {
-            const ratio = entry?.intersectionRatio ?? 0;
-            return (
-              <p
-                ref={ref}
-                style={{
-                  opacity: ratio,
-                }}
-              >
-                you would see different opacity when scrolling.
-              </p>
-            );
-          })
-        </InView>
-      );
+   function A() {
+     return (
+       <InView threshold={Array.from({ length: 101 }, (_, i) => i * 0.01)}>
+         {({ ref, entry }) => {
+           const ratio = entry?.intersectionRatio ?? 0;
+           const style = {
+             opacity: ratio,
+           };
+           return (
+             <div>
+               <p>you alway can see me</p>
+               <p ref={ref} style={style}>
+                 you would see different opacity when scrolling.
+               </p>
+             </div>
+           );
+         }}
+       </InView>
+     );
    }
    ```
 
@@ -103,16 +103,16 @@ function SlideUP({
       {({ inView, ref, entry }) => {
         const opacity = entry?.intersectionRatio ?? 0; // 可见比例
         const y = Math.floor(10 * (1 - opacity)) * 4; // 位移40px
-
+        const style = {
+          opacity,
+          transform: `translateY(${y}px)`,
+        };
         return (
           <div
             ref={ref}
             className={cn("duration-500", className)}
             // 组件进入视觉中心后，从底部滑出，一般可用于标题、文本滚动加载
-            style={{
-              opacity,
-              transform: `translateY(${y}px)`,
-            }}
+            style={style}
           >
             {children}
           </div>
@@ -131,8 +131,7 @@ function SlideUP({
 function Flip_onTop() {
   return (
     <InView
-      threshold={Array.from({ length: 101 }, (_, i) => i * 0.01)}
-      // 扩展下边界，组件从下方出现前，提前渲染，向上移动到屏幕边界时，触发消失动画
+      threshold={Array.from({ length: 101 }, (_, i) => i * 0.01)} // 扩展下边界，组件从下方出现前，提前渲染，向上移动到屏幕边界时，触发消失动画
       rootMargin="-400px 0px 1000% 0px"
     >
       {({ ref, entry }) => {
@@ -140,6 +139,11 @@ function Flip_onTop() {
         const opacity = ratio;
         const rotateX = Math.floor(-90 * (1 - ratio)); // 向屏幕内旋转90°
         const translateZ = ratio < 0.5 ? Math.floor(100 * (1 - ratio)) : 0; // 旋转45°后，像屏幕内移动100px
+
+        const style = {
+          opacity,
+          transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
+        };
 
         return (
           <div className="mt-40 border-t-2 border-red-300 perspective-[1000px]">
@@ -149,10 +153,7 @@ function Flip_onTop() {
                 `${ratio}`,
                 "mt-10 h-100 w-full bg-amber-100 text-black text-4xl rounded-lg duration-300 origin-top"
               )}
-              style={{
-                opacity,
-                transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
-              }}
+              style={style}
             >
               ssssssssssss
             </div>
@@ -195,14 +196,15 @@ function List_Flip_onTop() {
               const translateZ =
                 scaledRatio < 0.5 ? Math.floor(100 * (1 - scaledRatio)) : 0; // 旋转45°后，像屏幕内移动50px
 
+              const style = {
+                opacity,
+                transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
+              };
               return (
                 <div
                   className="sticky top-15 rounded-lg h-50 w-full bg-amber-200 origin-top duration-500"
-                  style={{
-                    opacity,
-                    transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
-                  }}
-                ></div>
+                  style={style}
+                />
               );
             })}
           </div>
