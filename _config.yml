@@ -1,0 +1,6 @@
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+defaults:
+  - scope:
+      path: "posts"
+    values:
+      render_with_liquid: false
