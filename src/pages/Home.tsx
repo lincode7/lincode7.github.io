@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { InView, useInView } from "react-intersection-observer";
+import { Link } from "react-router-dom";
 import FlipDown from "../components/animation/FlipUP";
 import SlideUP from "../components/animation/SlideUP";
 import Section1 from "../components/layout/Section1";
@@ -251,12 +252,12 @@ function RecentPosts({ className }: { className?: string }) {
                       transform: `rotateX(${rotateX}deg) translate3d(0px,0px,${translateZ}px)`,
                     }}
                   >
-                    <a
-                      href={`/blog/${post.tags[0]}/${post.id}`}
+                    <Link
+                      to={`/blog/${post.tags[0]}/${post.id}`}
                       className="lg:col-span-2 lg:-order-1 lg:pb-5 lg:border-b-2 lg:border-background/30 uppercase text-2xl md:text-4xl cursor-pointer hover:text-primary"
                     >
                       {post.title}
-                    </a>
+                    </Link>
                     <span
                       className={cn(
                         "block text-7xl lg:text-[300px] tracking-[-0.02em] leading-none lg:leading-[0.75] self-center lg:self-end justify-self-end lg:justify-self-start opacity-10"
